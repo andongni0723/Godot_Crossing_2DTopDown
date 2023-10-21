@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://ch1jqm4rvnnsw"]
+
+[ext_resource type="Texture2D" uid="uid://d1usn741aimqu" path="res://Assets/black.png" id="1_w2shj"]
+[ext_resource type="PackedScene" uid="uid://dqx5w317hsa8e" path="res://GameDate/Player.tscn" id="2_8nebv"]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(533, 462)
+scale = Vector2(5.13339, 5.24)
+texture = ExtResource("1_w2shj")
+offset = Vector2(-1, 2.08165e-12)
+
+[node name="Player" parent="." instance=ExtResource("2_8nebv")]
+position = Vector2(480, 364)
