@@ -1,0 +1,30 @@
+[gd_scene load_steps=4 format=3 uid="uid://w8xtj03ernbn"]
+
+[ext_resource type="Texture2D" uid="uid://b750fv0n6fmmj" path="res://Assets/white.png" id="1_sgtw7"]
+[ext_resource type="Texture2D" uid="uid://6rcpaagmx1os" path="res://Assets/triangle.png" id="2_wvm13"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ye7gh"]
+size = Vector2(72, 72)
+
+[node name="Basic Enemy Parent" type="Node2D"]
+
+[node name="Basic Enemy" type="RigidBody2D" parent="."]
+gravity_scale = 1.66533e-16
+lock_rotation = true
+freeze = true
+freeze_mode = 1
+
+[node name="arrow" type="Sprite2D" parent="Basic Enemy"]
+self_modulate = Color(0.890196, 0, 0, 1)
+position = Vector2(56, -1.56483e-13)
+rotation = 1.5708
+scale = Vector2(0.0896, 0.0896)
+texture = ExtResource("2_wvm13")
+
+[node name="Sprite2D" type="Sprite2D" parent="Basic Enemy"]
+self_modulate = Color(0.890196, 0, 0, 1)
+scale = Vector2(0.28, 0.28)
+texture = ExtResource("1_sgtw7")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Basic Enemy"]
+shape = SubResource("RectangleShape2D_ye7gh")

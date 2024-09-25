@@ -1,0 +1,51 @@
+[gd_scene load_steps=9 format=3 uid="uid://dqx5w317hsa8e"]
+
+[ext_resource type="Script" path="res://Scripts/CharacterShoot.cs" id="1_btpy5"]
+[ext_resource type="Script" path="res://Scripts/CharacterController.cs" id="1_lmixq"]
+[ext_resource type="Texture2D" uid="uid://b750fv0n6fmmj" path="res://Assets/white.png" id="1_o2uwu"]
+[ext_resource type="PackedScene" uid="uid://clih3n3okb0e4" path="res://GameData/PlayerBullet.tscn" id="3_o82ju"]
+[ext_resource type="PackedScene" uid="uid://bi8we04q2olxq" path="res://GameData/Particle/FireParticle.tscn" id="4_eqqoq"]
+[ext_resource type="Texture2D" uid="uid://6rcpaagmx1os" path="res://Assets/triangle.png" id="5_e2i87"]
+[ext_resource type="PackedScene" uid="uid://edqvktuderac" path="res://GameData/Particle/WalkParticle.tscn" id="5_kf86g"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qg57e"]
+size = Vector2(72, 72.5)
+
+[node name="Player Parent" type="Node2D"]
+script = ExtResource("1_lmixq")
+MaxSpeed = 300.0
+
+[node name="CharacterShoot" type="Node2D" parent="." node_paths=PackedStringArray("BulletSpawnPoint")]
+script = ExtResource("1_btpy5")
+Bullet = ExtResource("3_o82ju")
+FireParticle = ExtResource("4_eqqoq")
+BulletSpawnPoint = NodePath("../Player/CharacterBody2D/arrow")
+BulletSpeed = 800.0
+
+[node name="Player" type="Node2D" parent="."]
+
+[node name="CharacterBody2D" type="CharacterBody2D" parent="Player"]
+position = Vector2(-2.00332e-15, 0)
+collision_layer = 2
+collision_mask = 3
+
+[node name="GPUParticles2D" parent="Player/CharacterBody2D" instance=ExtResource("5_kf86g")]
+position = Vector2(1, 2)
+
+[node name="TextureRect" type="TextureRect" parent="Player/CharacterBody2D"]
+offset_left = -36.0
+offset_top = -36.0
+offset_right = 220.0
+offset_bottom = 220.0
+scale = Vector2(0.28, 0.28)
+texture = ExtResource("1_o2uwu")
+
+[node name="arrow" type="Sprite2D" parent="Player/CharacterBody2D"]
+position = Vector2(56, 1.06544e-13)
+rotation = 1.5708
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("5_e2i87")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player/CharacterBody2D"]
+position = Vector2(7.62939e-06, -0.249996)
+shape = SubResource("RectangleShape2D_qg57e")

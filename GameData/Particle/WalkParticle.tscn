@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://edqvktuderac"]
+
+[ext_resource type="Material" uid="uid://dkb1b7ncj6kc7" path="res://GameData/Particle/data/walk-particle-data.tres" id="1_a2trw"]
+
+[node name="GPUParticles2D" type="GPUParticles2D"]
+process_material = ExtResource("1_a2trw")
+lifetime = 0.5
+fixed_fps = 120
+collision_base_size = 0.0
