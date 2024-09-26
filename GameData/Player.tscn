@@ -1,12 +1,27 @@
-[gd_scene load_steps=9 format=3 uid="uid://dqx5w317hsa8e"]
+[gd_scene load_steps=11 format=3 uid="uid://dqx5w317hsa8e"]
 
 [ext_resource type="Script" path="res://Scripts/CharacterShoot.cs" id="1_btpy5"]
 [ext_resource type="Script" path="res://Scripts/CharacterController.cs" id="1_lmixq"]
 [ext_resource type="Texture2D" uid="uid://b750fv0n6fmmj" path="res://Assets/white.png" id="1_o2uwu"]
 [ext_resource type="PackedScene" uid="uid://clih3n3okb0e4" path="res://GameData/PlayerBullet.tscn" id="3_o82ju"]
 [ext_resource type="PackedScene" uid="uid://bi8we04q2olxq" path="res://GameData/Particle/FireParticle.tscn" id="4_eqqoq"]
+[ext_resource type="Shader" path="res://GameData/Particle/glow.gdshader" id="5_3o2lf"]
 [ext_resource type="Texture2D" uid="uid://6rcpaagmx1os" path="res://Assets/triangle.png" id="5_e2i87"]
 [ext_resource type="PackedScene" uid="uid://edqvktuderac" path="res://GameData/Particle/WalkParticle.tscn" id="5_kf86g"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jlhly"]
+shader = ExtResource("5_3o2lf")
+shader_parameter/fireball_scale_y = 1.0
+shader_parameter/glow_scale_y = 1.0
+shader_parameter/glow_strength = 1.0
+shader_parameter/glow_intensity = 0.0
+shader_parameter/pixel_size = 1
+shader_parameter/glow_position = Vector2(0.5, 0.5)
+shader_parameter/glow_size = Vector2(0.2, 0.2)
+shader_parameter/pulsate = false
+shader_parameter/pulsation_speed = 1.0
+shader_parameter/glow_intensity_start = 0.75
+shader_parameter/glow_intensity_stop = 1.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qg57e"]
 size = Vector2(72, 72.5)
@@ -25,6 +40,7 @@ BulletSpeed = 800.0
 [node name="Player" type="Node2D" parent="."]
 
 [node name="CharacterBody2D" type="CharacterBody2D" parent="Player"]
+material = SubResource("ShaderMaterial_jlhly")
 position = Vector2(-2.00332e-15, 0)
 collision_layer = 2
 collision_mask = 3

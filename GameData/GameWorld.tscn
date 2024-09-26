@@ -1,15 +1,31 @@
-[gd_scene load_steps=8 format=3 uid="uid://ch1jqm4rvnnsw"]
+[gd_scene load_steps=9 format=3 uid="uid://ch1jqm4rvnnsw"]
 
 [ext_resource type="Texture2D" uid="uid://d1usn741aimqu" path="res://Assets/black.png" id="1_w2shj"]
 [ext_resource type="PackedScene" uid="uid://dqx5w317hsa8e" path="res://GameData/Player.tscn" id="2_8nebv"]
 [ext_resource type="PackedScene" uid="uid://cnf10knxyxvku" path="res://GameData/Wall.tscn" id="3_j3eyg"]
+[ext_resource type="Shader" path="res://GameData/Particle/glow.gdshader" id="4_ckjtp"]
 [ext_resource type="PackedScene" uid="uid://dy05lwofixtep" path="res://GameData/Tower.tscn" id="4_ytiub"]
-[ext_resource type="PackedScene" uid="uid://w8xtj03ernbn" path="res://GameData/BasicEnemy.tscn" id="5_gnbiu"]
-[ext_resource type="PackedScene" uid="uid://xksrb2enrai6" path="res://GameData/Particle/BoomParticle.tscn" id="6_3pv3p"]
+[ext_resource type="PackedScene" uid="uid://rdeb7gg1bsbk" path="res://GameData/BasicEnemy.tscn" id="5_gnbiu"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gvfjc"]
+shader = ExtResource("4_ckjtp")
+shader_parameter/fireball_scale_y = 1.0
+shader_parameter/glow_scale_y = 1.0
+shader_parameter/glow_strength = 1.0
+shader_parameter/glow_intensity = 2.39
+shader_parameter/pixel_size = 1
+shader_parameter/glow_position = Vector2(0.5, 0.5)
+shader_parameter/glow_size = Vector2(0.2, 0.2)
+shader_parameter/pulsate = false
+shader_parameter/pulsation_speed = 1.0
+shader_parameter/glow_intensity_start = 0.75
+shader_parameter/glow_intensity_stop = 1.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_t1l5r"]
 
 [node name="Node2D" type="Node2D"]
+
+[node name="--- Environment Folder" type="Node" parent="."]
 
 [node name="Background" type="Sprite2D" parent="."]
 position = Vector2(568.898, 346.5)
@@ -22,7 +38,7 @@ offset = Vector2(-1, 2.08165e-12)
 [node name="Wall" parent="Environment" instance=ExtResource("3_j3eyg")]
 modulate = Color(0.32549, 0.32549, 0.32549, 1)
 position = Vector2(575, -40)
-scale = Vector2(5, 1)
+scale = Vector2(5.01966, 1)
 
 [node name="Wall2" parent="Environment" instance=ExtResource("3_j3eyg")]
 modulate = Color(0.32549, 0.32549, 0.32549, 1)
@@ -45,22 +61,21 @@ scale = Vector2(4.5, 1)
 position = Vector2(341, 208)
 height = 0.5
 
+[node name="--- Character" type="Node" parent="."]
+
 [node name="Player" parent="." instance=ExtResource("2_8nebv")]
+material = SubResource("ShaderMaterial_gvfjc")
 position = Vector2(564, 499)
 
 [node name="PointLight2D" type="PointLight2D" parent="Player"]
-position = Vector2(51.5, 61)
 scale = Vector2(64.5306, 67.3621)
+energy = 6.1
 texture = SubResource("AtlasTexture_t1l5r")
-texture_scale = 6.71
+texture_scale = 13.04
 
 [node name="Tower" parent="." instance=ExtResource("4_ytiub")]
 position = Vector2(571, 329)
 scale = Vector2(0.79, 0.79)
 
-[node name="Basic Enemy Parent" parent="." instance=ExtResource("5_gnbiu")]
-position = Vector2(747, 326)
-
-[node name="GPUParticles2D" parent="." instance=ExtResource("6_3pv3p")]
-position = Vector2(649, 499)
-scale = Vector2(200, 200)
+[node name="Basic Enemy" parent="." instance=ExtResource("5_gnbiu")]
+position = Vector2(769, 358)
