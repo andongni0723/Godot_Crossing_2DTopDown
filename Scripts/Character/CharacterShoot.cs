@@ -20,6 +20,9 @@ public partial class CharacterShoot : Node2D
 
     public void ShootAction()
     {
+        // CameraController.ApplyShake(0.1f, 0.1f);
+        CameraController.Instance.ApplyShake(5, 40);
+        
         var newBullet = (RigidBody2D)Bullet.Instantiate();
         newBullet.GlobalPosition = BulletSpawnPoint.GlobalPosition;
         newBullet.GlobalRotation = BulletSpawnPoint.GlobalRotation + Mathf.Pi;

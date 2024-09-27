@@ -1,5 +1,6 @@
-[gd_scene load_steps=9 format=3 uid="uid://ch1jqm4rvnnsw"]
+[gd_scene load_steps=10 format=3 uid="uid://ch1jqm4rvnnsw"]
 
+[ext_resource type="Script" path="res://Scripts/CameraController.cs" id="1_rjo7s"]
 [ext_resource type="Texture2D" uid="uid://d1usn741aimqu" path="res://Assets/black.png" id="1_w2shj"]
 [ext_resource type="PackedScene" uid="uid://dqx5w317hsa8e" path="res://GameData/Player.tscn" id="2_8nebv"]
 [ext_resource type="PackedScene" uid="uid://cnf10knxyxvku" path="res://GameData/Wall.tscn" id="3_j3eyg"]
@@ -25,10 +26,14 @@ shader_parameter/glow_intensity_stop = 1.0
 
 [node name="Node2D" type="Node2D"]
 
+[node name="Camera Parent" type="Node2D" parent="."]
+script = ExtResource("1_rjo7s")
+
+[node name="Camera2D" type="Camera2D" parent="Camera Parent"]
+
 [node name="--- Environment Folder" type="Node" parent="."]
 
 [node name="Background" type="Sprite2D" parent="."]
-position = Vector2(568.898, 346.5)
 scale = Vector2(4.89844, 2.74609)
 texture = ExtResource("1_w2shj")
 offset = Vector2(-1, 2.08165e-12)
@@ -37,23 +42,23 @@ offset = Vector2(-1, 2.08165e-12)
 
 [node name="Wall" parent="Environment" instance=ExtResource("3_j3eyg")]
 modulate = Color(0.32549, 0.32549, 0.32549, 1)
-position = Vector2(575, -40)
+position = Vector2(1, -368)
 scale = Vector2(5.01966, 1)
 
 [node name="Wall2" parent="Environment" instance=ExtResource("3_j3eyg")]
 modulate = Color(0.32549, 0.32549, 0.32549, 1)
-position = Vector2(573, 700)
+position = Vector2(-1, 372)
 scale = Vector2(5, 1)
 
 [node name="Wall3" parent="Environment" instance=ExtResource("3_j3eyg")]
 modulate = Color(0.32549, 0.32549, 0.32549, 1)
-position = Vector2(-45, 362)
+position = Vector2(-619, 22)
 rotation = 1.5708
 scale = Vector2(4.5, 1)
 
 [node name="Wall4" parent="Environment" instance=ExtResource("3_j3eyg")]
 modulate = Color(0.32549, 0.32549, 0.32549, 1)
-position = Vector2(1201, 363)
+position = Vector2(627, 22)
 rotation = 1.5708
 scale = Vector2(4.5, 1)
 
@@ -65,7 +70,7 @@ height = 0.5
 
 [node name="Player" parent="." instance=ExtResource("2_8nebv")]
 material = SubResource("ShaderMaterial_gvfjc")
-position = Vector2(564, 499)
+position = Vector2(-7, 170)
 
 [node name="PointLight2D" type="PointLight2D" parent="Player"]
 scale = Vector2(64.5306, 67.3621)
@@ -74,8 +79,16 @@ texture = SubResource("AtlasTexture_t1l5r")
 texture_scale = 13.04
 
 [node name="Tower" parent="." instance=ExtResource("4_ytiub")]
-position = Vector2(571, 329)
 scale = Vector2(0.79, 0.79)
 
+[node name="Basic Enemy4" parent="." instance=ExtResource("5_gnbiu")]
+position = Vector2(-321, 238)
+
+[node name="Basic Enemy3" parent="." instance=ExtResource("5_gnbiu")]
+position = Vector2(269, 246)
+
+[node name="Basic Enemy2" parent="." instance=ExtResource("5_gnbiu")]
+position = Vector2(-314, -3)
+
 [node name="Basic Enemy" parent="." instance=ExtResource("5_gnbiu")]
-position = Vector2(769, 358)
+position = Vector2(260, 1)

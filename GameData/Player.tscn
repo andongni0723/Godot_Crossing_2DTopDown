@@ -1,10 +1,11 @@
-[gd_scene load_steps=11 format=3 uid="uid://dqx5w317hsa8e"]
+[gd_scene load_steps=12 format=3 uid="uid://dqx5w317hsa8e"]
 
-[ext_resource type="Script" path="res://Scripts/CharacterShoot.cs" id="1_btpy5"]
-[ext_resource type="Script" path="res://Scripts/CharacterController.cs" id="1_lmixq"]
 [ext_resource type="Texture2D" uid="uid://b750fv0n6fmmj" path="res://Assets/white.png" id="1_o2uwu"]
+[ext_resource type="Script" path="res://Scripts/Character/CharacterController.cs" id="1_ss52i"]
+[ext_resource type="Script" path="res://Scripts/Character/CharacterShoot.cs" id="2_4hvvc"]
 [ext_resource type="PackedScene" uid="uid://clih3n3okb0e4" path="res://GameData/PlayerBullet.tscn" id="3_o82ju"]
 [ext_resource type="PackedScene" uid="uid://bi8we04q2olxq" path="res://GameData/Particle/FireParticle.tscn" id="4_eqqoq"]
+[ext_resource type="Script" path="res://Scripts/Character/CharacterCrossing.cs" id="5_0mv5n"]
 [ext_resource type="Shader" path="res://GameData/Particle/glow.gdshader" id="5_3o2lf"]
 [ext_resource type="Texture2D" uid="uid://6rcpaagmx1os" path="res://Assets/triangle.png" id="5_e2i87"]
 [ext_resource type="PackedScene" uid="uid://edqvktuderac" path="res://GameData/Particle/WalkParticle.tscn" id="5_kf86g"]
@@ -27,23 +28,26 @@ shader_parameter/glow_intensity_stop = 1.0
 size = Vector2(72, 72.5)
 
 [node name="Player Parent" type="Node2D"]
-script = ExtResource("1_lmixq")
+script = ExtResource("1_ss52i")
 MaxSpeed = 300.0
 
 [node name="CharacterShoot" type="Node2D" parent="." node_paths=PackedStringArray("BulletSpawnPoint")]
-script = ExtResource("1_btpy5")
+script = ExtResource("2_4hvvc")
 Bullet = ExtResource("3_o82ju")
 FireParticle = ExtResource("4_eqqoq")
 BulletSpawnPoint = NodePath("../Player/CharacterBody2D/arrow")
 BulletSpeed = 800.0
+
+[node name="CharacterCrossing" type="Node2D" parent="."]
+script = ExtResource("5_0mv5n")
 
 [node name="Player" type="Node2D" parent="."]
 
 [node name="CharacterBody2D" type="CharacterBody2D" parent="Player"]
 material = SubResource("ShaderMaterial_jlhly")
 position = Vector2(-2.00332e-15, 0)
-collision_layer = 2
-collision_mask = 3
+collision_layer = 3
+collision_mask = 12
 
 [node name="GPUParticles2D" parent="Player/CharacterBody2D" instance=ExtResource("5_kf86g")]
 position = Vector2(1, 2)

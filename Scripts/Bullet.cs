@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public partial class Bullet : RigidBody2D, IAttack
+public partial class Bullet : RigidBody2D
 {
     [ExportCategory("Components")]
     [Export] public PackedScene BoomParticle;
@@ -11,7 +11,7 @@ public partial class Bullet : RigidBody2D, IAttack
     [Export] public float Speed = 200;
     // [Export] public Vector2 Direction = Vector2.Right;
     
-    private Area2D _area;
+    // private Area2D _area;
     private float _collisionCount = 0;
     private Vector2 _point;
 
@@ -21,7 +21,7 @@ public partial class Bullet : RigidBody2D, IAttack
 
     public override void _Ready()
     {
-        _area = GetNode<Area2D>("Area2D");
+        // _area = GetNode<Area2D>("Area2D");
         _point = Position;
         
         // _localYDirection = GlobalTransform.Y;
@@ -49,6 +49,8 @@ public partial class Bullet : RigidBody2D, IAttack
     {
         _collisionCount++;
         
+        CameraController.Instance.ApplyShake(15, 40);
+        
         // hit object can attack
         if(collision.GetCollider() as Node2D is IAttack hit)
         {
@@ -74,9 +76,4 @@ public partial class Bullet : RigidBody2D, IAttack
             _velocity = _velocity.Bounce(collision.GetNormal());
         }
     } 
-
-    public void Damage(int damage)
-    {
-        QueueFree();
-    }
 }

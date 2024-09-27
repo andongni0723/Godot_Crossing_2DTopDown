@@ -4,9 +4,10 @@ using System;
 public partial class CharacterController : Node2D
 {
     [ExportCategory("Components")]
-    private CharacterBody2D _body;
+    public CharacterBody2D body;
     private Vector2 _mousePosition;
     private CharacterShoot _characterShoot;
+    private CharacterCrossing _characterCrossing;
     
     
     [ExportCategory("Settings")]
@@ -17,14 +18,14 @@ public partial class CharacterController : Node2D
 
     public override void _Ready()
     {
-        _body = GetNode<CharacterBody2D>("Player/CharacterBody2D");
+        body = GetNode<CharacterBody2D>("Player/CharacterBody2D");
         _characterShoot = GetNode<CharacterShoot>("CharacterShoot");
+        _characterCrossing = GetNode<CharacterCrossing>("CharacterCrossing");
         _acceleration = MaxSpeed / 0.2f;
     }
 
     public override void _Process(double delta)
     {
-        // _Move(delta);
         _Rotate();
         _Shoot();
     }
@@ -38,17 +39,18 @@ public partial class CharacterController : Node2D
     {
         var direction = Input.GetVector("move-left",
             "move-right", "move-up", "move-down");
-        // _body.Velocity = _direction.Normalized() * MaxSpeed; 
-        _body.Velocity = new Vector2(
-            Mathf.MoveToward(_body.Velocity.X, direction.X * MaxSpeed, _acceleration * (float)delta),
-            Mathf.MoveToward(_body.Velocity.Y, direction.Y * MaxSpeed, _acceleration * (float)delta));
         
-        _body.MoveAndSlide();
+        body.Velocity = new Vector2(
+            Mathf.MoveToward(body.Velocity.X, direction.X * MaxSpeed, _acceleration * (float)delta),
+            Mathf.MoveToward(body.Velocity.Y, direction.Y * MaxSpeed, _acceleration * (float)delta));
+        
+        // _body.MoveAndSlide();
+        body.MoveAndSlide();
     }
 
     private void _Rotate()
     {
-        _body.LookAt(GetGlobalMousePosition());
+        body.LookAt(GetGlobalMousePosition());
     }
 
     private void _Shoot()

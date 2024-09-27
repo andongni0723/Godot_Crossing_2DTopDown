@@ -1,18 +1,22 @@
-[gd_scene load_steps=5 format=3 uid="uid://rdeb7gg1bsbk"]
+[gd_scene load_steps=6 format=3 uid="uid://rdeb7gg1bsbk"]
 
 [ext_resource type="Script" path="res://Scripts/BaseEnemy.cs" id="1_kdnio"]
 [ext_resource type="Texture2D" uid="uid://b750fv0n6fmmj" path="res://Assets/white.png" id="1_sgtw7"]
 [ext_resource type="Texture2D" uid="uid://6rcpaagmx1os" path="res://Assets/triangle.png" id="2_wvm13"]
+[ext_resource type="PackedScene" uid="uid://b18epykrxi4bv" path="res://GameData/Particle/EnemyBoomParticle.tscn" id="2_yo78x"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_lqfsw"]
 size = Vector2(72, 72)
 
 [node name="Basic Enemy" type="RigidBody2D"]
+collision_layer = 8
+collision_mask = 11
 gravity_scale = 1.66533e-16
 lock_rotation = true
 freeze = true
 freeze_mode = 1
 script = ExtResource("1_kdnio")
+DeathParticle = ExtResource("2_yo78x")
 
 [node name="arrow2" type="Sprite2D" parent="."]
 self_modulate = Color(0.890196, 0, 0, 1)
