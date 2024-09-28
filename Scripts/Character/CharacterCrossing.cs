@@ -8,7 +8,8 @@ public partial class CharacterCrossing : Node
 
     public override void _Ready()
     {
-        _character = GetNode<CharacterController>("/root");
+        // _character = GetTree().Root.GetNode<CharacterController>(".");
+        _character = GetNode<CharacterController>("..");
     }
 
 
