@@ -1,13 +1,47 @@
-[gd_scene load_steps=5 format=3 uid="uid://clih3n3okb0e4"]
+[gd_scene load_steps=13 format=3 uid="uid://clih3n3okb0e4"]
 
 [ext_resource type="Script" path="res://Scripts/Bullet.cs" id="1_udfjw"]
 [ext_resource type="Texture2D" uid="uid://b2puw1d312dpt" path="res://Assets/circle.png" id="2_30lhq"]
 [ext_resource type="PackedScene" uid="uid://xksrb2enrai6" path="res://GameData/Particle/BoomParticle.tscn" id="2_r3qy4"]
+[ext_resource type="Script" path="res://Scripts/Trail.cs" id="3_0ft5c"]
+[ext_resource type="PackedScene" uid="uid://edqvktuderac" path="res://GameData/Particle/WalkParticle.tscn" id="3_jsids"]
+
+[sub_resource type="Curve" id="Curve_cevfr"]
+max_value = 200.0
+_data = [Vector2(0.0234604, 200), 0.0, -1.1408, 0, 0, Vector2(0.991192, 114.329), -299.078, -299.078, 0, 0, Vector2(0.991202, 0), -2134.43, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_rshh2"]
+curve = SubResource("Curve_cevfr")
+
+[sub_resource type="Curve" id="Curve_s2wom"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_a8mut"]
+curve = SubResource("Curve_s2wom")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_mnmao"]
+particle_flag_disable_z = true
+emission_shape = 6
+emission_ring_axis = Vector3(0, 0, 1)
+emission_ring_height = 2.08165e-12
+emission_ring_radius = 20.0
+emission_ring_inner_radius = 20.0
+radial_velocity_curve = SubResource("CurveTexture_rshh2")
+gravity = Vector3(2.08165e-12, 2.08165e-12, 2.08165e-12)
+scale_max = 10.0
+scale_curve = SubResource("CurveTexture_a8mut")
+sub_emitter_keep_velocity = true
+
+[sub_resource type="Curve" id="Curve_l7eo6"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_tkj4h"]
 radius = 19.0
 
-[node name="Bullet" type="RigidBody2D"]
+[node name="Bullet" type="RigidBody2D" groups=["Bullet"]]
 collision_layer = 2
 collision_mask = 12
 gravity_scale = 1.66533e-16
@@ -17,6 +51,19 @@ max_contacts_reported = 1
 contact_monitor = true
 script = ExtResource("1_udfjw")
 BoomParticle = ExtResource("2_r3qy4")
+
+[node name="Walk Particle" parent="." instance=ExtResource("3_jsids")]
+position = Vector2(1, 2)
+process_material = SubResource("ParticleProcessMaterial_mnmao")
+
+[node name="Line2D" type="Line2D" parent="."]
+points = PackedVector2Array(-53, 1, -1, 1)
+width = 25.0
+width_curve = SubResource("Curve_l7eo6")
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+script = ExtResource("3_0ft5c")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 scale = Vector2(0.15, 0.15)

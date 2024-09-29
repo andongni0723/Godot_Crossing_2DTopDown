@@ -11,7 +11,7 @@ lifetime = 0.5
 one_shot = true
 explosiveness = 1.0
 fixed_fps = 120
-visibility_rect = Rect2(-65.7573, -55.991, 141.049, 126.399)
+visibility_rect = Rect2(-101.941, -100.558, 202.843, 182.815)
 script = ExtResource("1_a3ki3")
 
 [connection signal="finished" from="." to="." method="_on_finished"]

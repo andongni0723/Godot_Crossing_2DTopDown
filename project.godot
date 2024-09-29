@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Crossing"
-config/version="0.2.A"
+config/version="0.2.C"
 run/main_scene="res://GameData/GameWorld.tscn"
 config/features=PackedStringArray("4.2", "C#", "Forward Plus")
 config/icon="res://icon.svg"

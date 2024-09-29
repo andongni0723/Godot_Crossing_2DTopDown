@@ -40,4 +40,5 @@ process_material = SubResource("ParticleProcessMaterial_iturn")
 lifetime = 0.3
 one_shot = true
 explosiveness = 1.0
+fixed_fps = 60
 script = ExtResource("1_pkxj1")

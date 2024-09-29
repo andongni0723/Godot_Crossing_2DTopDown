@@ -32,7 +32,6 @@ public partial class Bullet : RigidBody2D
     private Vector2 _velocity;
     public override void _PhysicsProcess(double delta)
     {
-        // 僅在不處於碰撞狀態時移動
         var collisionDetection = MoveAndCollide(_velocity * (float)delta);
         
         if (collisionDetection == null) return;

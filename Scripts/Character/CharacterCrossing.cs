@@ -9,7 +9,11 @@ public partial class CharacterCrossing : Node
     public override void _Ready()
     {
         // _character = GetTree().Root.GetNode<CharacterController>(".");
+        Node parent = GetParent();
+        GD.Print("Parent Node: " + parent.GetType());
         _character = GetNode<CharacterController>("..");
+        
+        EventHandler.Instance.PlayerTouchWall += Crossing;
     }
 
 
@@ -20,5 +24,13 @@ public partial class CharacterCrossing : Node
         {
             //TODO: if collision layer is wall
         }
+    }
+
+    private void Crossing(WallDirection wallDirection)
+    {
+        GD.Print(wallDirection);
+        _character.Position = wallDirection is WallDirection.Down or WallDirection.Up ?
+            new Vector2(_character.Position.X, -_character.Position.Y) : 
+            new Vector2(-_character.Position.X, _character.Position.Y);
     }
 }

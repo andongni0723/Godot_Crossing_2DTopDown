@@ -1,8 +1,8 @@
-[gd_scene load_steps=18 format=3 uid="uid://ch1jqm4rvnnsw"]
+[gd_scene load_steps=17 format=3 uid="uid://ch1jqm4rvnnsw"]
 
+[ext_resource type="Script" path="res://GameData/EventHandler.cs" id="1_f204s"]
 [ext_resource type="Script" path="res://Scripts/CameraController.cs" id="1_rjo7s"]
 [ext_resource type="Texture2D" uid="uid://d1usn741aimqu" path="res://Assets/black.png" id="1_w2shj"]
-[ext_resource type="PackedScene" uid="uid://dqx5w317hsa8e" path="res://GameData/Player.tscn" id="2_8nebv"]
 [ext_resource type="PackedScene" uid="uid://cnf10knxyxvku" path="res://GameData/Wall.tscn" id="3_j3eyg"]
 [ext_resource type="PackedScene" uid="uid://dy05lwofixtep" path="res://GameData/Tower.tscn" id="4_ytiub"]
 [ext_resource type="PackedScene" uid="uid://rdeb7gg1bsbk" path="res://GameData/BasicEnemy.tscn" id="5_gnbiu"]
@@ -10,6 +10,7 @@
 [ext_resource type="Shader" path="res://GameData/Shader/ChromicAberration.gdshader" id="8_wvvr3"]
 [ext_resource type="Shader" path="res://GameData/Glitch.gdshader" id="9_mnmlv"]
 [ext_resource type="Shader" path="res://GameData/Shader/fisheye.gdshader" id="9_sp50s"]
+[ext_resource type="PackedScene" uid="uid://brsjcgbew1al3" path="res://GameData/Player-1.tscn" id="12_7myx4"]
 
 [sub_resource type="Environment" id="Environment_qqc1k"]
 background_mode = 3
@@ -23,99 +24,6 @@ glow_bloom = 0.08
 glow_blend_mode = 1
 adjustment_enabled = true
 adjustment_brightness = 1.34
-
-[sub_resource type="Shader" id="Shader_48saf"]
-code = "shader_type canvas_item; 
-render_mode blend_add;
-
-uniform float fireball_scale_y = 1.0;
-uniform float glow_scale_y = 1.0;
-uniform float glow_strength = 1.0;
-uniform float glow_intensity = 0.0; // Default value for glow_intensity
-uniform sampler2D noise : repeat_enable, filter_nearest_mipmap_anisotropic;
-uniform sampler2D noise2 : repeat_enable, filter_nearest_mipmap_anisotropic;
-uniform sampler2D colo_curve; 
-uniform int pixel_size : hint_range(1, 100) = 1;
-
-// Parameters for position and size
-uniform vec2 glow_position = vec2(0.5, 0.5);
-uniform vec2 glow_size = vec2(0.2, 0.2);
-
-// Parameters for pulsating effect
-uniform bool pulsate = false;
-uniform float pulsation_speed = 1.0;
-uniform float glow_intensity_start = 0.75;
-uniform float glow_intensity_stop = 1.0;
-
-vec4 f1(vec2 uv, float time){
-	vec4 nv2 = texture(noise, uv + vec2(time, 0.0));
-	vec4 n2v2 = texture(noise2, uv + vec2(time*.8, 0.0));
-	nv2.r = max(0., nv2.r + uv.x - 1.0);
-	n2v2.r = max(0., n2v2.r + uv.x - 1.0); 
-	return nv2 * n2v2;
-}
-	
-void fragment()
-{ 	
-	vec2 mUV = (UV - glow_position) / glow_size;
-	vec2 uv = (mUV - 0.5) * 2.0 * vec2(1.0, fireball_scale_y); 
-	float time = TIME;
-    vec2 cuv = mUV - vec2(0.5); 
-	float d2c = length(cuv);
-	vec4 color = COLOR;
-	// 
-	color *= (f1(uv, time) + f1(uv + vec2(0.1, 0.0), time + 11.514) + f1(uv + vec2(0.05, 0.0), time + 14.14));
-	
-	color.r -= 1.0;
-	color.r = -pow(color.r, 2.0) + 1.0;
-	//
-	color.rgb = texture(colo_curve, vec2(color.r, 0.0)).rgb;
-	float randmoo = texture(noise2, mUV + vec2(time, -time)).r;
-	randmoo = mix(randmoo, 0.0, mUV.x);
-    color.r *= smoothstep(0.5, 0.48 - (0.2 - min(mUV.x, 1.0) * 0.2), d2c + randmoo * 0.4);
-    COLOR = color;
-	COLOR.rgb = mix(COLOR.rgb, vec3(0.0), smoothstep(0.00001, 0.0, color.r));
-	// light
-	vec2 glowUV = (UV - glow_position) / glow_size;
-	float d2c_l = length(glowUV * vec2(1.0, glow_scale_y) - vec2(0.58, 0.5 * glow_scale_y));
-	
-	// Oscillating glow_intensity if pulsate is true, otherwise use the default glow_intensity
-	float glow_intensity_value = pulsate ? mix(glow_intensity_start, glow_intensity_stop, 0.5 + 0.5 * sin(time * pulsation_speed * 3.14159 * 2.0)) : glow_intensity;
-	
-	float l = -log(d2c_l + glow_intensity_value) * glow_strength;
-	float randmoo2 = texture(noise2, vec2(time, -time)).r;
-	
-	COLOR += texture(colo_curve, vec2(1.0 - d2c_l - 0.1 * randmoo2, 0.0)) * l;
-	//COLOR += vec4(0.8, 0.8, 0.6, 1.0) * l;
-	//
-	color.r *= smoothstep(0.5, 0.1, length(UV - vec2(0.5)));
-	
-	vec2 pos = UV / TEXTURE_PIXEL_SIZE;
-	vec2 square = vec2(float(pixel_size), float(pixel_size));
-	vec2 top_left = floor(pos / square) * square;
-	vec4 total = vec4(0.0, 0.0, 0.0, 0.0);
-	for (int x = int(top_left.x); x < int(top_left.x) + pixel_size; x++){
-		for (int y = int(top_left.y); y < int(top_left.y) + pixel_size; y++){
-			total += texture(TEXTURE, vec2(float(x), float(y)) * TEXTURE_PIXEL_SIZE);
-		}
-	}
-	COLOR -= total / float(pixel_size * pixel_size);
-}
-"
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_gvfjc"]
-shader = SubResource("Shader_48saf")
-shader_parameter/fireball_scale_y = 1.0
-shader_parameter/glow_scale_y = 1.0
-shader_parameter/glow_strength = 1.0
-shader_parameter/glow_intensity = 2.39
-shader_parameter/pixel_size = 1
-shader_parameter/glow_position = Vector2(0.5, 0.5)
-shader_parameter/glow_size = Vector2(0.2, 0.2)
-shader_parameter/pulsate = false
-shader_parameter/pulsation_speed = 1.0
-shader_parameter/glow_intensity_start = 0.75
-shader_parameter/glow_intensity_stop = 1.0
 
 [sub_resource type="LabelSettings" id="LabelSettings_1qtyb"]
 line_spacing = 10.92
@@ -145,6 +53,9 @@ shader_parameter/effect_amount = 0.0
 
 [node name="Node2D" type="Node2D"]
 
+[node name="EventHandler" type="Node2D" parent="."]
+script = ExtResource("1_f204s")
+
 [node name="Camera Parent" type="Node2D" parent="."]
 position = Vector2(0, 1)
 script = ExtResource("1_rjo7s")
@@ -167,30 +78,29 @@ offset = Vector2(-1, 2.08165e-12)
 [node name="Wall" parent="Environment" instance=ExtResource("3_j3eyg")]
 modulate = Color(0.32549, 0.32549, 0.32549, 1)
 position = Vector2(1, -368)
-scale = Vector2(5.01966, 1)
+scale = Vector2(5.02426, 1)
 
 [node name="Wall2" parent="Environment" instance=ExtResource("3_j3eyg")]
 modulate = Color(0.32549, 0.32549, 0.32549, 1)
 position = Vector2(-1, 372)
 scale = Vector2(5, 1)
+wallDirection = 1
 
 [node name="Wall3" parent="Environment" instance=ExtResource("3_j3eyg")]
 modulate = Color(0.32549, 0.32549, 0.32549, 1)
 position = Vector2(-619, 22)
 rotation = 1.5708
 scale = Vector2(4.5, 1)
+wallDirection = 2
 
 [node name="Wall4" parent="Environment" instance=ExtResource("3_j3eyg")]
 modulate = Color(0.32549, 0.32549, 0.32549, 1)
 position = Vector2(627, 22)
 rotation = 1.5708
 scale = Vector2(4.5, 1)
+wallDirection = 3
 
 [node name="--- Character" type="Node" parent="."]
-
-[node name="Player" parent="." instance=ExtResource("2_8nebv")]
-material = SubResource("ShaderMaterial_gvfjc")
-position = Vector2(14, 178)
 
 [node name="Tower" parent="." instance=ExtResource("4_ytiub")]
 scale = Vector2(0.79, 0.79)
@@ -204,8 +114,8 @@ offset_right = 407.0
 offset_bottom = 53.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
-text = "Crossing v0.1 2nd Waves
-Score: 4000    Health: 20
+text = "Crossing v0.2.B --
+Score: 0    Healt: 100
 "
 label_settings = SubResource("LabelSettings_1qtyb")
 
@@ -254,3 +164,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="CharacterBody2D2" parent="." instance=ExtResource("12_7myx4")]
+position = Vector2(-132, 141)
