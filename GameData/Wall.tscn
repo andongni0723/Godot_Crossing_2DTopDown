@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://cnf10knxyxvku"]
+[gd_scene load_steps=6 format=3 uid="uid://cnf10knxyxvku"]
 
 [ext_resource type="Script" path="res://Scripts/Wall.cs" id="1_jjbs8"]
-[ext_resource type="Texture2D" uid="uid://b750fv0n6fmmj" path="res://Assets/white.png" id="1_jw32b"]
+[ext_resource type="Texture2D" uid="uid://b750fv0n6fmmj" path="res://Assets/Image/white.png" id="1_jw32b"]
+[ext_resource type="PackedScene" uid="uid://hn3b6r7vuk6e" path="res://GameData/WallFade.tscn" id="2_a4u5c"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jc6ur"]
 size = Vector2(254, 86)
@@ -11,6 +12,7 @@ size = Vector2(264, 96)
 
 [node name="Wall" type="Node2D"]
 script = ExtResource("1_jjbs8")
+WallHitVfx = ExtResource("2_a4u5c")
 
 [node name="StaticBody2D" type="StaticBody2D" parent="."]
 collision_layer = 4
@@ -32,7 +34,7 @@ debug_color = Color(0, 0.6, 0.701961, 0)
 [node name="Sprite2D" type="Sprite2D" parent="."]
 self_modulate = Color(0.568627, 0.568627, 0.568627, 1)
 position = Vector2(-1, 0)
-scale = Vector2(0.992188, 0.335938)
+scale = Vector2(1, 0.336)
 texture = ExtResource("1_jw32b")
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]

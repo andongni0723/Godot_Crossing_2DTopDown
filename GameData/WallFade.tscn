@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://hn3b6r7vuk6e"]
+
+[ext_resource type="Texture2D" uid="uid://b750fv0n6fmmj" path="res://Assets/Image/white.png" id="1_5qk1b"]
+[ext_resource type="Script" path="res://Scripts/WallFade.cs" id="1_172rp"]
+
+[node name="WallFade" type="Node2D" node_paths=PackedStringArray("EndPoint")]
+script = ExtResource("1_172rp")
+EndPoint = NodePath("Node2D")
+duration = 0.5
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(1, 1, 1, 0.392157)
+scale = Vector2(10, 0.336)
+texture = ExtResource("1_5qk1b")
+
+[node name="Node2D" type="Node2D" parent="."]
+position = Vector2(0, 47)

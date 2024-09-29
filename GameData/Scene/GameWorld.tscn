@@ -1,0 +1,202 @@
+[gd_scene load_steps=22 format=3 uid="uid://ch1jqm4rvnnsw"]
+
+[ext_resource type="Script" path="res://GameData/EventHandler.cs" id="1_66w2q"]
+[ext_resource type="Script" path="res://Scripts/CameraController.cs" id="2_hv4mp"]
+[ext_resource type="AudioStream" uid="uid://dpfjnxrcbb544" path="res://Assets/Audio/Crossing H.A.R.D - Test.mp3" id="3_0ihpa"]
+[ext_resource type="Script" path="res://Scripts/AudioManager.cs" id="3_a4mk5"]
+[ext_resource type="Texture2D" uid="uid://d1usn741aimqu" path="res://Assets/Image/black.png" id="3_vbicv"]
+[ext_resource type="PackedScene" uid="uid://cnf10knxyxvku" path="res://GameData/Wall.tscn" id="4_061o3"]
+[ext_resource type="AudioStream" uid="uid://b6sr2dqfg0f34" path="res://Assets/Audio/Sound/fire.wav" id="5_1l66c"]
+[ext_resource type="PackedScene" uid="uid://brsjcgbew1al3" path="res://GameData/Player.tscn" id="5_ryv6p"]
+[ext_resource type="PackedScene" uid="uid://dy05lwofixtep" path="res://GameData/Tower.tscn" id="6_3x3jr"]
+[ext_resource type="AudioStream" uid="uid://ddw5og63q43um" path="res://Assets/Audio/Sound/hit_wall.wav" id="6_cogk4"]
+[ext_resource type="AudioStream" uid="uid://ckopcoi2r8iuv" path="res://Assets/Audio/Sound/hit.wav" id="7_ixu4l"]
+[ext_resource type="FontFile" uid="uid://c5dr6r5wbd4bl" path="res://Font/Px437_IBM_EGA_8x8.ttf" id="7_spwim"]
+[ext_resource type="PackedScene" uid="uid://rdeb7gg1bsbk" path="res://GameData/BasicEnemy.tscn" id="8_joo00"]
+[ext_resource type="Shader" path="res://GameData/Shader/ChromicAberration.gdshader" id="9_c4jgw"]
+[ext_resource type="Shader" path="res://GameData/Shader/Glitch.gdshader" id="10_fn2j6"]
+[ext_resource type="Shader" path="res://GameData/Shader/fisheye.gdshader" id="11_rnjr7"]
+
+[sub_resource type="Environment" id="Environment_qqc1k"]
+background_mode = 3
+ambient_light_energy = 0.0
+tonemap_mode = 1
+tonemap_exposure = 0.69
+glow_enabled = true
+glow_intensity = 0.95
+glow_strength = 0.95
+glow_bloom = 0.08
+glow_blend_mode = 1
+adjustment_enabled = true
+adjustment_brightness = 1.34
+
+[sub_resource type="LabelSettings" id="LabelSettings_1qtyb"]
+line_spacing = 10.92
+font = ExtResource("7_spwim")
+font_color = Color(0, 0.819608, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_kwylm"]
+shader = ExtResource("9_c4jgw")
+shader_parameter/r_displacement = Vector2(10, 2.08165e-12)
+shader_parameter/g_displacement = Vector2(-0.6, 2.08165e-12)
+shader_parameter/b_displacement = Vector2(-7.2, 2.08165e-12)
+shader_parameter/height = 0.7
+shader_parameter/width = 0.5
+shader_parameter/fade = 0.7
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_chtdw"]
+shader = ExtResource("10_fn2j6")
+shader_parameter/setting_skake_power = 0.1
+shader_parameter/shake_rate = 1.0
+shader_parameter/shake_speed = 5.0
+shader_parameter/shake_block_size = 100.0
+shader_parameter/shake_color_rate = 0.005
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xv5gv"]
+shader = ExtResource("11_rnjr7")
+shader_parameter/effect_amount = 0.0
+
+[node name="GameWorld" type="Node2D"]
+
+[node name="EventHandler" type="Node2D" parent="."]
+script = ExtResource("1_66w2q")
+
+[node name="Camera Parent" type="Node2D" parent="."]
+position = Vector2(0, 1)
+script = ExtResource("2_hv4mp")
+
+[node name="Camera2D" type="Camera2D" parent="Camera Parent"]
+
+[node name="Audio Manager" type="Node2D" parent="." node_paths=PackedStringArray("BgmPlayer", "SfxPlayer", "EnemySfxPlayer")]
+script = ExtResource("3_a4mk5")
+BgmPlayer = NodePath("BGM Player")
+SfxPlayer = NodePath("SFX Player")
+EnemySfxPlayer = NodePath("Enemu SFX Player")
+FightBgm = ExtResource("3_0ihpa")
+FireSound = ExtResource("5_1l66c")
+HitWallSound = ExtResource("6_cogk4")
+HitSound = ExtResource("7_ixu4l")
+
+[node name="BGM Player" type="AudioStreamPlayer" parent="Audio Manager"]
+stream = ExtResource("3_0ihpa")
+volume_db = -10.0
+autoplay = true
+parameters/looping = true
+
+[node name="SFX Player" type="AudioStreamPlayer" parent="Audio Manager"]
+volume_db = -5.0
+autoplay = true
+
+[node name="Enemu SFX Player" type="AudioStreamPlayer" parent="Audio Manager"]
+volume_db = -5.0
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="Audio Manager"]
+volume_db = -17.137
+
+[node name="--- Environment Folder" type="Node" parent="."]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_qqc1k")
+
+[node name="Background" type="Sprite2D" parent="."]
+z_index = -1
+scale = Vector2(4.89844, 2.74609)
+texture = ExtResource("3_vbicv")
+offset = Vector2(-1, 2.08165e-12)
+
+[node name="Environment" type="Node2D" parent="."]
+
+[node name="Wall" parent="Environment" instance=ExtResource("4_061o3")]
+modulate = Color(0.32549, 0.32549, 0.32549, 1)
+position = Vector2(1, -368)
+scale = Vector2(5.02426, 1)
+
+[node name="Wall2" parent="Environment" instance=ExtResource("4_061o3")]
+modulate = Color(0.32549, 0.32549, 0.32549, 1)
+position = Vector2(-1, 372)
+rotation = -3.14159
+scale = Vector2(5, 1)
+wallDirection = 1
+
+[node name="Wall3" parent="Environment" instance=ExtResource("4_061o3")]
+modulate = Color(0.32549, 0.32549, 0.32549, 1)
+position = Vector2(-619, 22)
+rotation = -1.5708
+scale = Vector2(4.5, 1)
+wallDirection = 2
+
+[node name="Wall4" parent="Environment" instance=ExtResource("4_061o3")]
+modulate = Color(0.32549, 0.32549, 0.32549, 1)
+position = Vector2(627, 22)
+rotation = 1.5708
+scale = Vector2(4.5, 1)
+wallDirection = 3
+
+[node name="--- Character" type="Node" parent="."]
+
+[node name="CharacterBody2D2" parent="." instance=ExtResource("5_ryv6p")]
+position = Vector2(-132, 141)
+
+[node name="Tower" parent="." instance=ExtResource("6_3x3jr")]
+scale = Vector2(0.79, 0.79)
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="Label" type="Label" parent="UI"]
+offset_left = 7.0
+offset_top = 11.0
+offset_right = 407.0
+offset_bottom = 53.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "Crossing v0.2.B --
+Score: 0    Healt: 100
+"
+label_settings = SubResource("LabelSettings_1qtyb")
+
+[node name="--- Test Node" type="Node" parent="."]
+
+[node name="Basic Enemy4" parent="." instance=ExtResource("8_joo00")]
+position = Vector2(-322, 238)
+
+[node name="Basic Enemy3" parent="." instance=ExtResource("8_joo00")]
+position = Vector2(278, 219)
+
+[node name="Basic Enemy2" parent="." instance=ExtResource("8_joo00")]
+position = Vector2(-328, -2)
+
+[node name="Basic Enemy" parent="." instance=ExtResource("8_joo00")]
+position = Vector2(266, -5)
+
+[node name="Chronic Aberration" type="CanvasLayer" parent="."]
+
+[node name="Chronic Aberration" type="ColorRect" parent="Chronic Aberration"]
+material = SubResource("ShaderMaterial_kwylm")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Glitch" type="CanvasLayer" parent="."]
+visible = false
+
+[node name="Glitch" type="ColorRect" parent="Glitch"]
+material = SubResource("ShaderMaterial_chtdw")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -1.0
+offset_right = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Fisheye" type="CanvasLayer" parent="."]
+
+[node name="Fisheye" type="ColorRect" parent="Fisheye"]
+material = SubResource("ShaderMaterial_xv5gv")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2

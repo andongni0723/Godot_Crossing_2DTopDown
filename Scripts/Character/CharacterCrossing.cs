@@ -3,12 +3,13 @@ using System;
 
 public partial class CharacterCrossing : Node
 {
-    // [ExportCategory("Components")]
+    [ExportCategory("Components")] 
+    [Export] public PackedScene CrossingParticle;
+    [Export] public Timer CrossingCooldownTimer;
     private CharacterController _character;
 
     public override void _Ready()
     {
-        // _character = GetTree().Root.GetNode<CharacterController>(".");
         Node parent = GetParent();
         GD.Print("Parent Node: " + parent.GetType());
         _character = GetNode<CharacterController>("..");
@@ -16,19 +17,16 @@ public partial class CharacterCrossing : Node
         EventHandler.Instance.PlayerTouchWall += Crossing;
     }
 
-
-    public override void _Process(double delta)
-    {
-        KinematicCollision2D collision = _character.body.GetLastSlideCollision();
-        if (collision != null)
-        {
-            //TODO: if collision layer is wall
-        }
-    }
-
     private void Crossing(WallDirection wallDirection)
     {
-        GD.Print(wallDirection);
+        if(!CrossingCooldownTimer.IsStopped()) return;
+        CrossingCooldownTimer.Start();
+        
+        // is not cooldown
+        var newParticle = CrossingParticle.Instantiate() as Node2D;
+        GetTree().Root.AddChild(newParticle);
+        newParticle!.GlobalPosition = _character.GlobalPosition;
+        
         _character.Position = wallDirection is WallDirection.Down or WallDirection.Up ?
             new Vector2(_character.Position.X, -_character.Position.Y) : 
             new Vector2(-_character.Position.X, _character.Position.Y);

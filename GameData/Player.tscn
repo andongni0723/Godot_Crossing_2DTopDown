@@ -1,67 +1,74 @@
-[gd_scene load_steps=11 format=3 uid="uid://dqx5w317hsa8e"]
+[gd_scene load_steps=13 format=3 uid="uid://brsjcgbew1al3"]
 
-[ext_resource type="Texture2D" uid="uid://b750fv0n6fmmj" path="res://Assets/white.png" id="1_o2uwu"]
-[ext_resource type="Script" path="res://Scripts/Character/CharacterShoot.cs" id="2_4hvvc"]
-[ext_resource type="PackedScene" uid="uid://clih3n3okb0e4" path="res://GameData/PlayerBullet.tscn" id="3_o82ju"]
-[ext_resource type="PackedScene" uid="uid://bi8we04q2olxq" path="res://GameData/Particle/FireParticle.tscn" id="4_eqqoq"]
-[ext_resource type="Script" path="res://Scripts/Character/CharacterCrossing.cs" id="5_0mv5n"]
-[ext_resource type="Texture2D" uid="uid://6rcpaagmx1os" path="res://Assets/triangle.png" id="5_e2i87"]
-[ext_resource type="PackedScene" uid="uid://edqvktuderac" path="res://GameData/Particle/WalkParticle.tscn" id="5_kf86g"]
+[ext_resource type="Script" path="res://Scripts/Character/CharacterShoot.cs" id="1_eyy5u"]
+[ext_resource type="Script" path="res://Scripts/Character/CharacterController.cs" id="1_n7en2"]
+[ext_resource type="PackedScene" uid="uid://clih3n3okb0e4" path="res://GameData/PlayerBullet.tscn" id="2_dva62"]
+[ext_resource type="PackedScene" uid="uid://bi8we04q2olxq" path="res://GameData/Particle/FireParticle.tscn" id="3_epco8"]
+[ext_resource type="Script" path="res://Scripts/Character/CharacterCrossing.cs" id="4_fkiu2"]
+[ext_resource type="PackedScene" uid="uid://edqvktuderac" path="res://GameData/Particle/WalkParticle.tscn" id="5_l85mg"]
+[ext_resource type="PackedScene" uid="uid://xksrb2enrai6" path="res://GameData/Particle/BoomParticle.tscn" id="6_8yxkf"]
+[ext_resource type="Texture2D" uid="uid://b750fv0n6fmmj" path="res://Assets/Image/white.png" id="6_hpr4l"]
+[ext_resource type="Texture2D" uid="uid://6rcpaagmx1os" path="res://Assets/Image/triangle.png" id="7_a3tf2"]
 
-[sub_resource type="Gradient" id="Gradient_6v8vv"]
+[sub_resource type="Gradient" id="Gradient_8u7w5"]
 offsets = PackedFloat32Array(0, 0.910663)
 colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_8out4"]
-gradient = SubResource("Gradient_6v8vv")
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_7rki0"]
+gradient = SubResource("Gradient_8u7w5")
 fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0.90812, 0.119658)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_qg57e"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qmeje"]
 size = Vector2(72, 72.5)
 
-[node name="PlayerParent" type="Node2D"]
-
-[node name="CharacterShoot" type="Node2D" parent="." node_paths=PackedStringArray("BulletSpawnPoint")]
-script = ExtResource("2_4hvvc")
-Bullet = ExtResource("3_o82ju")
-FireParticle = ExtResource("4_eqqoq")
-BulletSpawnPoint = NodePath("../Player/CharacterBody2D/arrow")
-BulletSpeed = 800.0
-
-[node name="CharacterCrossing" type="Node2D" parent="."]
-script = ExtResource("5_0mv5n")
-
-[node name="Player" type="Node2D" parent="."]
-
-[node name="CharacterBody2D" type="CharacterBody2D" parent="Player" groups=["Player"]]
-position = Vector2(-2.00332e-15, 0)
+[node name="CharacterBody2D" type="CharacterBody2D" groups=["Player"]]
+position = Vector2(5, 2)
 collision_layer = 3
 collision_mask = 12
 platform_wall_layers = 4
+script = ExtResource("1_n7en2")
+MaxSpeed = 350.0
 
-[node name="PointLight2D" type="PointLight2D" parent="Player/CharacterBody2D"]
+[node name="CharacterShoot" type="Node2D" parent="." node_paths=PackedStringArray("BulletSpawnPoint")]
+script = ExtResource("1_eyy5u")
+Bullet = ExtResource("2_dva62")
+FireParticle = ExtResource("3_epco8")
+BulletSpawnPoint = NodePath("../Arrow")
+BulletSpeed = 800.0
+
+[node name="CharacterCrossing" type="Node2D" parent="." node_paths=PackedStringArray("CrossingCooldownTimer")]
+script = ExtResource("4_fkiu2")
+CrossingParticle = ExtResource("6_8yxkf")
+CrossingCooldownTimer = NodePath("../Crossing Cooldown Timer")
+
+[node name="Crossing Cooldown Timer" type="Timer" parent="."]
+one_shot = true
+
+[node name="-----Component" type="Node" parent="."]
+
+[node name="PointLight2D2" type="PointLight2D" parent="."]
 scale = Vector2(7, 7)
 energy = 2.61
 range_z_max = -1
 range_layer_max = 100
-texture = SubResource("GradientTexture2D_8out4")
+texture = SubResource("GradientTexture2D_7rki0")
 
-[node name="Walk Particle" parent="Player/CharacterBody2D" instance=ExtResource("5_kf86g")]
+[node name="Walk Particle2" parent="." instance=ExtResource("5_l85mg")]
 position = Vector2(1, 2)
 
-[node name="Sprite2D" type="Sprite2D" parent="Player/CharacterBody2D"]
+[node name="Player Image" type="Sprite2D" parent="."]
 position = Vector2(2.00332e-15, 0)
 scale = Vector2(0.28, 0.278913)
-texture = ExtResource("1_o2uwu")
+texture = ExtResource("6_hpr4l")
 
-[node name="arrow" type="Sprite2D" parent="Player/CharacterBody2D"]
+[node name="Arrow" type="Sprite2D" parent="."]
 position = Vector2(56, 1.06544e-13)
 rotation = 1.5708
 scale = Vector2(0.1, 0.1)
-texture = ExtResource("5_e2i87")
+texture = ExtResource("7_a3tf2")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Player/CharacterBody2D"]
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="."]
 position = Vector2(7.62939e-06, -0.249996)
-shape = SubResource("RectangleShape2D_qg57e")
+shape = SubResource("RectangleShape2D_qmeje")

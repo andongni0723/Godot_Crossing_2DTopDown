@@ -21,10 +21,7 @@ public partial class Bullet : RigidBody2D
 
     public override void _Ready()
     {
-        // _area = GetNode<Area2D>("Area2D");
         _point = Position;
-        
-        // _localYDirection = GlobalTransform.Y;
         _velocity = GlobalTransform.Y.Normalized() * Speed;
 
     }
@@ -53,6 +50,7 @@ public partial class Bullet : RigidBody2D
         // hit object can attack
         if(collision.GetCollider() as Node2D is IAttack hit)
         {
+            AudioManager.Instance.PlaySound(AudioManager.Instance.HitSound);
             hit.Damage(damage);
             var newParticle = (GpuParticles2D)BoomParticle.Instantiate();
             newParticle.GlobalPosition = GlobalPosition;
@@ -63,6 +61,8 @@ public partial class Bullet : RigidBody2D
         // has collision twice
         else if (_collisionCount >= 2)
         {
+            AudioManager.Instance.PlaySound(AudioManager.Instance.HitSound);
+            
             var newParticle = (GpuParticles2D)BoomParticle.Instantiate();
             newParticle.GlobalPosition = GlobalPosition;
             GetTree().Root.AddChild(newParticle);
@@ -72,6 +72,7 @@ public partial class Bullet : RigidBody2D
         // rebound
         else
         {
+            AudioManager.Instance.PlaySound(AudioManager.Instance.HitWallSound);
             _velocity = _velocity.Bounce(collision.GetNormal());
         }
     } 

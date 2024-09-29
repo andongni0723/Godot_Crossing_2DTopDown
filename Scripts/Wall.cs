@@ -8,6 +8,9 @@ public enum WallDirection
 
 public partial class Wall : Node2D
 {
+    [ExportCategory("Components")]
+    [Export] public PackedScene WallHitVfx;
+ 
     [ExportCategory("Setting")]
     [Export] public WallDirection wallDirection; // up, down, left, right
     
@@ -20,7 +23,10 @@ public partial class Wall : Node2D
     {
         if(body.IsInGroup("Bullet"))
         {
-            //TODO: bullet vfx
+            var newVfx = WallHitVfx.Instantiate() as Node2D;
+            newVfx!.GlobalPosition = GlobalPosition;
+            newVfx!.GlobalRotation = GlobalRotation;
+            GetTree().Root.AddChild(newVfx);
         }
         else if (body.IsInGroup("Player"))
         {

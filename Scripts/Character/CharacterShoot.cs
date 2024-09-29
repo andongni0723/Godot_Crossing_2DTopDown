@@ -13,15 +13,12 @@ public partial class CharacterShoot : Node2D
     
     [ExportCategory("Settings")]
     [Export] public float BulletSpeed = 500;
-
-    // public override void _Ready()
-    // {
-    // }
-
+    
+    
     public void ShootAction()
     {
-        // CameraController.ApplyShake(0.1f, 0.1f);
         CameraController.Instance.ApplyShake(5, 40);
+        AudioManager.Instance.PlaySound(AudioManager.Instance.FireSound);
         
         var newBullet = (RigidBody2D)Bullet.Instantiate();
         newBullet.GlobalPosition = BulletSpawnPoint.GlobalPosition;

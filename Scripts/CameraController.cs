@@ -30,8 +30,6 @@ public partial class CameraController : Singleton<CameraController>
         if (_shakeStrength > 0.1)
         {
             _shakeStrength = (float)Mathf.Lerp(_shakeStrength, 0, _shakeFade * delta);
-            
-
             _camera.Offset = RandomOffset();
         }
     }

@@ -1,7 +1,7 @@
 [gd_scene load_steps=13 format=3 uid="uid://clih3n3okb0e4"]
 
 [ext_resource type="Script" path="res://Scripts/Bullet.cs" id="1_udfjw"]
-[ext_resource type="Texture2D" uid="uid://b2puw1d312dpt" path="res://Assets/circle.png" id="2_30lhq"]
+[ext_resource type="Texture2D" uid="uid://b2puw1d312dpt" path="res://Assets/Image/circle.png" id="2_30lhq"]
 [ext_resource type="PackedScene" uid="uid://xksrb2enrai6" path="res://GameData/Particle/BoomParticle.tscn" id="2_r3qy4"]
 [ext_resource type="Script" path="res://Scripts/Trail.cs" id="3_0ft5c"]
 [ext_resource type="PackedScene" uid="uid://edqvktuderac" path="res://GameData/Particle/WalkParticle.tscn" id="3_jsids"]

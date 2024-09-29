@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://dy05lwofixtep"]
 
-[ext_resource type="Texture2D" uid="uid://ethcbtnqmn5y" path="res://Assets/out square.png" id="1_w0761"]
-[ext_resource type="Texture2D" uid="uid://6rcpaagmx1os" path="res://Assets/triangle.png" id="2_bs45u"]
+[ext_resource type="Texture2D" uid="uid://ethcbtnqmn5y" path="res://Assets/Image/out square.png" id="1_w0761"]
+[ext_resource type="Texture2D" uid="uid://6rcpaagmx1os" path="res://Assets/Image/triangle.png" id="2_bs45u"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2d2ys"]
 size = Vector2(124, 126)
