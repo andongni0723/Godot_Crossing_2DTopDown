@@ -7,7 +7,7 @@
 shader_type canvas_item;
 
 // 振動の強さ
-uniform float setting_skake_power = 0.5;
+uniform float setting_shake_power = 0.5;
 
 // 振動率
 uniform float shake_rate : hint_range( 0.0, 1.0 ) = 0.2;
@@ -29,7 +29,7 @@ void fragment( )
 {
 	float shake_power;
 
-	shake_power = setting_skake_power * 0.03;
+	shake_power = setting_shake_power * 0.03;
 
 	float enable_shift = float(
 		random( trunc( TIME * shake_speed ) )

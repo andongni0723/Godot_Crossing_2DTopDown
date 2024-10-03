@@ -1,14 +1,28 @@
-[gd_scene load_steps=4 format=3 uid="uid://dy05lwofixtep"]
+[gd_scene load_steps=5 format=3 uid="uid://dy05lwofixtep"]
 
+[ext_resource type="Script" path="res://Scripts/Character/Tower.cs" id="1_noa5d"]
 [ext_resource type="Texture2D" uid="uid://ethcbtnqmn5y" path="res://Assets/Image/out square.png" id="1_w0761"]
 [ext_resource type="Texture2D" uid="uid://6rcpaagmx1os" path="res://Assets/Image/triangle.png" id="2_bs45u"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_2d2ys"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0ywen"]
 size = Vector2(124, 126)
 
-[node name="Tower" type="Node2D"]
+[node name="RigidBody2D" type="RigidBody2D" node_paths=PackedStringArray("HealCooldownTimer")]
+collision_layer = 18
+collision_mask = 11
+gravity_scale = 0.0
+lock_rotation = true
+freeze = true
+freeze_mode = 1
+script = ExtResource("1_noa5d")
+HealCooldownTimer = NodePath("Heal Cooldown Timer")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_0ywen")
+debug_color = Color(1, 1, 1, 0)
 
 [node name="Sprites" type="Node2D" parent="."]
+scale = Vector2(0.97, 0.97)
 
 [node name="OutSquare" type="Sprite2D" parent="Sprites"]
 scale = Vector2(0.5, 0.5)
@@ -18,12 +32,5 @@ texture = ExtResource("1_w0761")
 scale = Vector2(0.25, 0.25)
 texture = ExtResource("2_bs45u")
 
-[node name="RigidBody2D" type="RigidBody2D" parent="."]
-collision_layer = 3
-collision_mask = 3
-lock_rotation = true
-freeze = true
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D"]
-shape = SubResource("RectangleShape2D_2d2ys")
-debug_color = Color(1, 1, 1, 0)
+[node name="Heal Cooldown Timer" type="Timer" parent="."]
+autostart = true
