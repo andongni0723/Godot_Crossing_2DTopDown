@@ -31,7 +31,7 @@ public partial class BaseEnemyAttack : Node
             if(AttackTimer.IsStopped() && body is IAttack attack)
             {
                 AttackTimer.Start();
-                attack.Damage(5);
+                attack.Damage(2);
                 var vfx = (Node2D)AttackVfx.Instantiate();
                 vfx.GlobalPosition = body.GlobalPosition;
                 GetParent().AddChild(vfx);

@@ -15,10 +15,12 @@ script = ExtResource("1_jjbs8")
 WallHitVfx = ExtResource("2_a4u5c")
 
 [node name="StaticBody2D" type="StaticBody2D" parent="."]
+visible = false
 collision_layer = 4
 collision_mask = 11
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+visible = false
 position = Vector2(-1, 0)
 shape = SubResource("RectangleShape2D_jc6ur")
 debug_color = Color(0, 0.6, 0.701961, 0)

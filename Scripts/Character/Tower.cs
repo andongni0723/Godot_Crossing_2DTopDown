@@ -6,6 +6,7 @@ public partial class Tower : Node2D, IAttack
     [Export] public int Health = 100;
     
     [Export] public Label HealthLabel;
+    [Export] public Panel BlackPanel;
     [Export] public Timer HealCooldownTimer;
     
     public override void _Ready()
@@ -26,6 +27,13 @@ public partial class Tower : Node2D, IAttack
         Health -= damage;
         HealthLabel.Text = $"Health: {Health.ToString()}";
         EventHandler.Instance.EmitSignal(nameof(EventHandler.Instance.TowerDamaged), damage, Health);
+        
+        //time scale to 0
+        if(Health < 0)
+        {
+            BlackPanel.Visible = true;
+            GetTree().Paused = true;
+        }
     }
     
 

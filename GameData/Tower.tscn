@@ -7,7 +7,7 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0ywen"]
 size = Vector2(124, 126)
 
-[node name="RigidBody2D" type="RigidBody2D" node_paths=PackedStringArray("HealCooldownTimer")]
+[node name="Tower" type="RigidBody2D" node_paths=PackedStringArray("HealCooldownTimer")]
 collision_layer = 18
 collision_mask = 11
 gravity_scale = 0.0

@@ -31,6 +31,7 @@ public partial class BasicEnemy : CharacterBody2D, IAttack
 
     public void Damage(int damage)
     {
+        GameManager.Instance.AddScore(1);
         QueueFree();
     }
 }

@@ -1,20 +1,22 @@
-[gd_scene load_steps=23 format=3 uid="uid://ch1jqm4rvnnsw"]
+[gd_scene load_steps=26 format=3 uid="uid://ch1jqm4rvnnsw"]
 
 [ext_resource type="Script" path="res://GameData/EventHandler.cs" id="1_66w2q"]
+[ext_resource type="Script" path="res://GameData/GameManager.cs" id="1_kqov4"]
 [ext_resource type="Script" path="res://Scripts/CameraController.cs" id="2_hv4mp"]
 [ext_resource type="AudioStream" uid="uid://dpfjnxrcbb544" path="res://Assets/Audio/Crossing H.A.R.D - Test.mp3" id="3_0ihpa"]
 [ext_resource type="Script" path="res://Scripts/AudioManager.cs" id="3_a4mk5"]
+[ext_resource type="Script" path="res://GameData/Enemys/EnemySpawnManager.cs" id="3_taiml"]
 [ext_resource type="Texture2D" uid="uid://d1usn741aimqu" path="res://Assets/Image/black.png" id="3_vbicv"]
 [ext_resource type="PackedScene" uid="uid://cnf10knxyxvku" path="res://GameData/Wall.tscn" id="4_061o3"]
 [ext_resource type="AudioStream" uid="uid://b6sr2dqfg0f34" path="res://Assets/Audio/Sound/fire.wav" id="5_1l66c"]
 [ext_resource type="PackedScene" uid="uid://brsjcgbew1al3" path="res://GameData/Player.tscn" id="5_ryv6p"]
-[ext_resource type="PackedScene" uid="uid://dy05lwofixtep" path="res://GameData/Tower.tscn" id="6_3x3jr"]
 [ext_resource type="AudioStream" uid="uid://ddw5og63q43um" path="res://Assets/Audio/Sound/hit_wall.wav" id="6_cogk4"]
 [ext_resource type="AudioStream" uid="uid://ckopcoi2r8iuv" path="res://Assets/Audio/Sound/hit.wav" id="7_ixu4l"]
 [ext_resource type="FontFile" uid="uid://c5dr6r5wbd4bl" path="res://Font/Px437_IBM_EGA_8x8.ttf" id="7_spwim"]
 [ext_resource type="PackedScene" uid="uid://rdeb7gg1bsbk" path="res://GameData/BasicEnemy.tscn" id="8_joo00"]
 [ext_resource type="Shader" path="res://GameData/Shader/ChromicAberration.gdshader" id="9_c4jgw"]
 [ext_resource type="Shader" path="res://GameData/Shader/Glitch.gdshader" id="10_fn2j6"]
+[ext_resource type="PackedScene" uid="uid://dy05lwofixtep" path="res://GameData/Tower.tscn" id="10_lvee7"]
 [ext_resource type="Shader" path="res://GameData/Shader/fisheye.gdshader" id="11_rnjr7"]
 [ext_resource type="Script" path="res://Scripts/Shader/Glitch.cs" id="16_303np"]
 
@@ -31,11 +33,6 @@ glow_blend_mode = 1
 adjustment_enabled = true
 adjustment_brightness = 1.34
 adjustment_saturation = 1.53
-
-[sub_resource type="LabelSettings" id="LabelSettings_1qtyb"]
-line_spacing = 10.92
-font = ExtResource("7_spwim")
-font_color = Color(0, 0.819608, 0, 1)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_kwylm"]
 shader = ExtResource("9_c4jgw")
@@ -54,11 +51,23 @@ shader_parameter/shake_speed = 5.0
 shader_parameter/shake_block_size = 100.0
 shader_parameter/shake_color_rate = 0.005
 
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_e5l6g"]
+texture = ExtResource("3_vbicv")
+
+[sub_resource type="LabelSettings" id="LabelSettings_1qtyb"]
+line_spacing = 10.92
+font = ExtResource("7_spwim")
+font_color = Color(0, 0.819608, 0, 1)
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_xv5gv"]
 shader = ExtResource("11_rnjr7")
 shader_parameter/effect_amount = 0.0
 
 [node name="GameWorld" type="Node2D"]
+
+[node name="GameManager" type="Node2D" parent="." node_paths=PackedStringArray("ScoreLabel")]
+script = ExtResource("1_kqov4")
+ScoreLabel = NodePath("../UI/Score Labe")
 
 [node name="EventHandler" type="Node2D" parent="."]
 script = ExtResource("1_66w2q")
@@ -68,6 +77,23 @@ position = Vector2(0, 1)
 script = ExtResource("2_hv4mp")
 
 [node name="Camera2D" type="Camera2D" parent="Camera Parent"]
+
+[node name="Enemy Spawn Manager" type="Node2D" parent="." node_paths=PackedStringArray("SpawnTimer")]
+script = ExtResource("3_taiml")
+SpawnRadius = 1000.0
+UpSpawnAreas = Rect2(-700, -450, 1400, 0)
+DownSpawnAreas = Rect2(-700, 450, 1400, 0)
+LeftSpawnAreas = Rect2(-700, -450, 0, 900)
+RightSpawnAreas = Rect2(700, -450, 0, 900)
+BasicEnemy = ExtResource("8_joo00")
+SpawnTimer = NodePath("Spawn Timer")
+
+[node name="Node2D" type="Node2D" parent="Enemy Spawn Manager"]
+position = Vector2(-700, -450)
+
+[node name="Spawn Timer" type="Timer" parent="Enemy Spawn Manager"]
+wait_time = 0.5
+one_shot = true
 
 [node name="Audio Manager" type="Node2D" parent="." node_paths=PackedStringArray("BgmPlayer", "SfxPlayer", "EnemySfxPlayer")]
 script = ExtResource("3_a4mk5")
@@ -136,58 +162,15 @@ wallDirection = 3
 
 [node name="--- Character" type="Node" parent="."]
 
+[node name="Tower" parent="." node_paths=PackedStringArray("HealthLabel", "BlackPanel") instance=ExtResource("10_lvee7")]
+position = Vector2(9, -9)
+HealthLabel = NodePath("../UI/Health Label")
+BlackPanel = NodePath("../UI/Panel")
+
 [node name="CharacterBody2D2" parent="." instance=ExtResource("5_ryv6p")]
 position = Vector2(-132, 141)
 
-[node name="Tower" parent="." node_paths=PackedStringArray("HealthLabel") instance=ExtResource("6_3x3jr")]
-HealthLabel = NodePath("../UI/Health Label")
-
-[node name="UI" type="CanvasLayer" parent="."]
-
-[node name="Game Label" type="Label" parent="UI"]
-offset_left = 7.0
-offset_top = 11.0
-offset_right = 407.0
-offset_bottom = 35.0
-size_flags_horizontal = 0
-size_flags_vertical = 0
-text = "Crossing v0.2.B --
-"
-label_settings = SubResource("LabelSettings_1qtyb")
-
-[node name="Health Label" type="Label" parent="UI"]
-offset_left = 6.0
-offset_top = 40.0
-offset_right = 406.0
-offset_bottom = 64.0
-size_flags_horizontal = 0
-size_flags_vertical = 0
-text = "Health: 100"
-label_settings = SubResource("LabelSettings_1qtyb")
-metadata/_edit_use_anchors_ = true
-
-[node name="Glitch Label" type="Label" parent="UI"]
-offset_left = 199.0
-offset_top = 40.0
-offset_right = 599.0
-offset_bottom = 64.0
-size_flags_horizontal = 0
-text = "Glitch: 0"
-label_settings = SubResource("LabelSettings_1qtyb")
-
 [node name="--- Test Node" type="Node" parent="."]
-
-[node name="Basic Enemy4" parent="." instance=ExtResource("8_joo00")]
-position = Vector2(-515, 273)
-
-[node name="Basic Enemy3" parent="." instance=ExtResource("8_joo00")]
-position = Vector2(516, 281)
-
-[node name="Basic Enemy2" parent="." instance=ExtResource("8_joo00")]
-position = Vector2(-520, -279)
-
-[node name="Basic Enemy" parent="." instance=ExtResource("8_joo00")]
-position = Vector2(522, -256)
 
 [node name="Chronic Aberration" type="CanvasLayer" parent="."]
 
@@ -214,6 +197,59 @@ grow_vertical = 2
 script = ExtResource("16_303np")
 PowerLabel = NodePath("../../UI/Glitch Label")
 metadata/_edit_lock_ = true
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="Panel" type="Panel" parent="UI"]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -1.0
+offset_right = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_e5l6g")
+
+[node name="Game Label" type="Label" parent="UI"]
+offset_left = 7.0
+offset_top = 11.0
+offset_right = 407.0
+offset_bottom = 35.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "Crossing v0.2.B --
+"
+label_settings = SubResource("LabelSettings_1qtyb")
+
+[node name="Health Label" type="Label" parent="UI"]
+offset_left = 6.0
+offset_top = 40.0
+offset_right = 406.0
+offset_bottom = 64.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "Health: 100"
+label_settings = SubResource("LabelSettings_1qtyb")
+metadata/_edit_use_anchors_ = true
+
+[node name="Score Labe" type="Label" parent="UI"]
+offset_left = 7.0
+offset_top = 67.0
+offset_right = 407.0
+offset_bottom = 91.0
+size_flags_horizontal = 0
+text = "Score: 0"
+label_settings = SubResource("LabelSettings_1qtyb")
+
+[node name="Glitch Label" type="Label" parent="UI"]
+offset_left = 199.0
+offset_top = 40.0
+offset_right = 599.0
+offset_bottom = 64.0
+size_flags_horizontal = 0
+text = "Glitch: 0"
+label_settings = SubResource("LabelSettings_1qtyb")
 
 [node name="Fisheye" type="CanvasLayer" parent="."]
 
