@@ -7,7 +7,7 @@ public partial class Singleton<T> : Node2D where T : Singleton<T>
     
     public static T Instance => _instance;
 
-    public override void _Ready()
+    public override void _EnterTree()
     {
         if(_instance != null)
             QueueFree();

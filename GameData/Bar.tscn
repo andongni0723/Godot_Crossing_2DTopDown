@@ -1,0 +1,47 @@
+[gd_scene load_steps=5 format=3 uid="uid://5u2ousqtq1cq"]
+
+[ext_resource type="Texture2D" uid="uid://ethcbtnqmn5y" path="res://Assets/Image/out square.png" id="1_2ff4h"]
+[ext_resource type="Texture2D" uid="uid://b750fv0n6fmmj" path="res://Assets/Image/white.png" id="2_mm3cu"]
+[ext_resource type="FontFile" uid="uid://c5dr6r5wbd4bl" path="res://Font/Px437_IBM_EGA_8x8.ttf" id="2_yea5x"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_k4ydm"]
+texture = ExtResource("2_mm3cu")
+region_rect = Rect2(-24, -24, 304, 304)
+
+[node name="Bar" type="Node2D"]
+
+[node name="NinePatchRect" type="NinePatchRect" parent="."]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -248.0
+offset_top = 34.0
+offset_right = -34.0
+offset_bottom = 92.0
+grow_horizontal = 0
+texture = ExtResource("1_2ff4h")
+region_rect = Rect2(16, 16, 224, 224)
+patch_margin_left = 8
+patch_margin_top = 8
+patch_margin_right = 8
+patch_margin_bottom = 8
+
+[node name="ProgressBar" type="ProgressBar" parent="NinePatchRect"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 12.0
+offset_top = 11.0
+offset_right = -12.0
+offset_bottom = -7.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1, 0.89)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_yea5x")
+theme_override_styles/fill = SubResource("StyleBoxTexture_k4ydm")
+max_value = 30.0
+step = 1.0
+value = 24.0

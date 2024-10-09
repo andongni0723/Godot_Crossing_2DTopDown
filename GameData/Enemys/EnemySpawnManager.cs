@@ -4,8 +4,10 @@ using System.Collections.Generic;
 
 public partial class EnemySpawnManager : Node2D
 {
+    [ExportCategory("Debug")]
+    [Export] public bool DebugMode = false;
+    
     [ExportCategory("Settings")]
-    [Export] public float SpawnRadius = 100;
     [Export] public Rect2 UpSpawnAreas;
     [Export] public Rect2 DownSpawnAreas;
     [Export] public Rect2 LeftSpawnAreas;
@@ -14,6 +16,9 @@ public partial class EnemySpawnManager : Node2D
     [ExportCategory("Components")]
     [Export] public PackedScene BasicEnemy;
     [Export] public Timer SpawnTimer;
+    [Export] public Timer WaveTimer;
+    
+    private Random _random = new();
 
 
     public override void _Ready()
@@ -22,33 +27,43 @@ public partial class EnemySpawnManager : Node2D
 
     public override void _Process(double delta)
     {
-        Spawn();
+        if(DebugMode) return;
+        WaveSpawn();
     }
 
-    private void Spawn()
+    private void WaveSpawn()
     {
-        if(SpawnTimer.IsStopped())
+        if (!WaveTimer.IsStopped()) return;
+
+        for (int i = 0; i < _random.Next(5, 10); i++)
         {
-            SpawnTimer.Start();
-            
             // 隨機選擇一個生成區域
-            List<Rect2> spawnAreas = new List<Rect2>() { UpSpawnAreas, DownSpawnAreas, LeftSpawnAreas, RightSpawnAreas };
-            var random = new Random();
-            int randomIndex = random.Next(0, spawnAreas.Count);
-            Rect2 selectedArea = spawnAreas[randomIndex];
-
-            // 在選擇的區域內隨機生成一個點
-            float xPos = (float)(random.NextDouble() * selectedArea.Size.X + selectedArea.Position.X);
-            float yPos = (float)(random.NextDouble() * selectedArea.Size.Y + selectedArea.Position.Y);
-            Vector2 spawnPosition = new Vector2(xPos, yPos);
-
-            // 實例化並設置敵人位置
-            var enemy = BasicEnemy.Instantiate() as BasicEnemy;
-            enemy!.GlobalPosition = spawnPosition;
-
-            // 將敵人加入場景
-            GetTree().Root.AddChild(enemy);
+            var spawnAreas = new List<Rect2>() { UpSpawnAreas, DownSpawnAreas, LeftSpawnAreas, RightSpawnAreas };
+            var randomIndex = _random.Next(0, spawnAreas.Count);
+            var selectedArea = spawnAreas[randomIndex];
+            Spawn(selectedArea);
         }
+        
+        WaveTimer.Start();
+
+    }
+
+    private void Spawn(Rect2 selectedArea)
+    {
+        if (!SpawnTimer.IsStopped()) return;
+        SpawnTimer.Start();
+            
+        // 在選擇的區域內隨機生成一個點
+        float xPos = (float)(_random.NextDouble() * selectedArea.Size.X + selectedArea.Position.X);
+        float yPos = (float)(_random.NextDouble() * selectedArea.Size.Y + selectedArea.Position.Y);
+        Vector2 spawnPosition = new Vector2(xPos, yPos);
+
+        // 實例化並設置敵人位置
+        var enemy = BasicEnemy.Instantiate() as BasicEnemy;
+        enemy!.GlobalPosition = spawnPosition;
+
+        // 將敵人加入場景
+        GetTree().Root.AddChild(enemy);
     }
     
     public override void _Draw()

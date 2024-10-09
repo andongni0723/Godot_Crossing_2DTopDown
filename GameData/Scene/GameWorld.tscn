@@ -1,6 +1,6 @@
-[gd_scene load_steps=26 format=3 uid="uid://ch1jqm4rvnnsw"]
+[gd_scene load_steps=32 format=3 uid="uid://ch1jqm4rvnnsw"]
 
-[ext_resource type="Script" path="res://GameData/EventHandler.cs" id="1_66w2q"]
+[ext_resource type="Script" path="res://Scripts/Utility/EventHandler.cs" id="1_66w2q"]
 [ext_resource type="Script" path="res://GameData/GameManager.cs" id="1_kqov4"]
 [ext_resource type="Script" path="res://Scripts/CameraController.cs" id="2_hv4mp"]
 [ext_resource type="AudioStream" uid="uid://dpfjnxrcbb544" path="res://Assets/Audio/Crossing H.A.R.D - Test.mp3" id="3_0ihpa"]
@@ -19,6 +19,10 @@
 [ext_resource type="PackedScene" uid="uid://dy05lwofixtep" path="res://GameData/Tower.tscn" id="10_lvee7"]
 [ext_resource type="Shader" path="res://GameData/Shader/fisheye.gdshader" id="11_rnjr7"]
 [ext_resource type="Script" path="res://Scripts/Shader/Glitch.cs" id="16_303np"]
+[ext_resource type="Texture2D" uid="uid://b7fol31gv5uya" path="res://Assets/Image/Warning.png" id="19_y1lqn"]
+[ext_resource type="PackedScene" uid="uid://5u2ousqtq1cq" path="res://GameData/Bar.tscn" id="20_knj04"]
+[ext_resource type="Texture2D" uid="uid://ethcbtnqmn5y" path="res://Assets/Image/out square.png" id="20_snus0"]
+[ext_resource type="Texture2D" uid="uid://b750fv0n6fmmj" path="res://Assets/Image/white.png" id="21_866gf"]
 
 [sub_resource type="Environment" id="Environment_qqc1k"]
 background_mode = 3
@@ -59,15 +63,29 @@ line_spacing = 10.92
 font = ExtResource("7_spwim")
 font_color = Color(0, 0.819608, 0, 1)
 
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_71x63"]
+texture_margin_left = 8.0
+texture_margin_top = 9.0
+texture_margin_right = 10.0
+texture_margin_bottom = 8.0
+region_rect = Rect2(16, 16, 224, 224)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_oy7yb"]
+texture = ExtResource("21_866gf")
+region_rect = Rect2(-24, -24, 304, 304)
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_xv5gv"]
 shader = ExtResource("11_rnjr7")
 shader_parameter/effect_amount = 0.0
 
 [node name="GameWorld" type="Node2D"]
 
-[node name="GameManager" type="Node2D" parent="." node_paths=PackedStringArray("ScoreLabel")]
+[node name="GameManager" type="Node2D" parent="." node_paths=PackedStringArray("VersionLabel", "ScoreLabel", "HealthLabel", "BlackPanel")]
 script = ExtResource("1_kqov4")
-ScoreLabel = NodePath("../UI/Score Labe")
+VersionLabel = NodePath("../HUD/Game Label")
+ScoreLabel = NodePath("../HUD/Score Labe")
+HealthLabel = NodePath("../HUD/Health Label")
+BlackPanel = NodePath("../HUD/Black Panel")
 
 [node name="EventHandler" type="Node2D" parent="."]
 script = ExtResource("1_66w2q")
@@ -78,21 +96,25 @@ script = ExtResource("2_hv4mp")
 
 [node name="Camera2D" type="Camera2D" parent="Camera Parent"]
 
-[node name="Enemy Spawn Manager" type="Node2D" parent="." node_paths=PackedStringArray("SpawnTimer")]
+[node name="Enemy Spawn Manager" type="Node2D" parent="." node_paths=PackedStringArray("SpawnTimer", "WaveTimer")]
 script = ExtResource("3_taiml")
-SpawnRadius = 1000.0
 UpSpawnAreas = Rect2(-700, -450, 1400, 0)
 DownSpawnAreas = Rect2(-700, 450, 1400, 0)
 LeftSpawnAreas = Rect2(-700, -450, 0, 900)
 RightSpawnAreas = Rect2(700, -450, 0, 900)
 BasicEnemy = ExtResource("8_joo00")
 SpawnTimer = NodePath("Spawn Timer")
+WaveTimer = NodePath("Wave Timer")
 
 [node name="Node2D" type="Node2D" parent="Enemy Spawn Manager"]
 position = Vector2(-700, -450)
 
 [node name="Spawn Timer" type="Timer" parent="Enemy Spawn Manager"]
-wait_time = 0.5
+wait_time = 0.1
+one_shot = true
+
+[node name="Wave Timer" type="Timer" parent="Enemy Spawn Manager"]
+wait_time = 0.7
 one_shot = true
 
 [node name="Audio Manager" type="Node2D" parent="." node_paths=PackedStringArray("BgmPlayer", "SfxPlayer", "EnemySfxPlayer")]
@@ -107,7 +129,6 @@ HitSound = ExtResource("7_ixu4l")
 
 [node name="BGM Player" type="AudioStreamPlayer" parent="Audio Manager"]
 stream = ExtResource("3_0ihpa")
-volume_db = -10.0
 autoplay = true
 parameters/looping = true
 
@@ -162,15 +183,20 @@ wallDirection = 3
 
 [node name="--- Character" type="Node" parent="."]
 
-[node name="Tower" parent="." node_paths=PackedStringArray("HealthLabel", "BlackPanel") instance=ExtResource("10_lvee7")]
+[node name="Tower" parent="." instance=ExtResource("10_lvee7")]
 position = Vector2(9, -9)
-HealthLabel = NodePath("../UI/Health Label")
-BlackPanel = NodePath("../UI/Panel")
 
 [node name="CharacterBody2D2" parent="." instance=ExtResource("5_ryv6p")]
 position = Vector2(-132, 141)
 
 [node name="--- Test Node" type="Node" parent="."]
+
+[node name="World HUD" type="CanvasLayer" parent="."]
+follow_viewport_enabled = true
+
+[node name="Bullet Bar" parent="World HUD" instance=ExtResource("20_knj04")]
+modulate = Color(1, 1, 1, 0.266667)
+position = Vector2(572, -304)
 
 [node name="Chronic Aberration" type="CanvasLayer" parent="."]
 
@@ -182,6 +208,23 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 metadata/_edit_lock_ = true
+
+[node name="Glich HUD" type="CanvasLayer" parent="."]
+
+[node name="Warning Image" type="TextureRect" parent="Glich HUD"]
+modulate = Color(0.917647, 0, 0.168627, 1)
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -10.0
+offset_top = 10.0
+offset_right = 58.0
+offset_bottom = 68.0
+grow_horizontal = 2
+scale = Vector2(0.5, 0.5)
+size_flags_horizontal = 6
+size_flags_vertical = 0
+texture = ExtResource("19_y1lqn")
 
 [node name="Glitch" type="CanvasLayer" parent="."]
 
@@ -195,12 +238,13 @@ offset_right = -1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("16_303np")
-PowerLabel = NodePath("../../UI/Glitch Label")
+PowerLabel = NodePath("../../HUD/Glitch Label")
 metadata/_edit_lock_ = true
 
-[node name="UI" type="CanvasLayer" parent="."]
+[node name="HUD" type="CanvasLayer" parent="."]
+follow_viewport_scale = 2.0
 
-[node name="Panel" type="Panel" parent="UI"]
+[node name="Black Panel" type="Panel" parent="HUD"]
 visible = false
 anchors_preset = 15
 anchor_right = 1.0
@@ -211,7 +255,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_e5l6g")
 
-[node name="Game Label" type="Label" parent="UI"]
+[node name="Game Label" type="Label" parent="HUD"]
 offset_left = 7.0
 offset_top = 11.0
 offset_right = 407.0
@@ -222,7 +266,7 @@ text = "Crossing v0.2.B --
 "
 label_settings = SubResource("LabelSettings_1qtyb")
 
-[node name="Health Label" type="Label" parent="UI"]
+[node name="Health Label" type="Label" parent="HUD"]
 offset_left = 6.0
 offset_top = 40.0
 offset_right = 406.0
@@ -233,7 +277,7 @@ text = "Health: 100"
 label_settings = SubResource("LabelSettings_1qtyb")
 metadata/_edit_use_anchors_ = true
 
-[node name="Score Labe" type="Label" parent="UI"]
+[node name="Score Labe" type="Label" parent="HUD"]
 offset_left = 7.0
 offset_top = 67.0
 offset_right = 407.0
@@ -242,7 +286,7 @@ size_flags_horizontal = 0
 text = "Score: 0"
 label_settings = SubResource("LabelSettings_1qtyb")
 
-[node name="Glitch Label" type="Label" parent="UI"]
+[node name="Glitch Label" type="Label" parent="HUD"]
 offset_left = 199.0
 offset_top = 40.0
 offset_right = 599.0
@@ -250,6 +294,53 @@ offset_bottom = 64.0
 size_flags_horizontal = 0
 text = "Glitch: 0"
 label_settings = SubResource("LabelSettings_1qtyb")
+
+[node name="NinePatchRect" type="NinePatchRect" parent="HUD"]
+visible = false
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -248.0
+offset_top = 34.0
+offset_right = -34.0
+offset_bottom = 92.0
+grow_horizontal = 0
+texture = ExtResource("20_snus0")
+region_rect = Rect2(16, 16, 224, 224)
+patch_margin_left = 8
+patch_margin_top = 8
+patch_margin_right = 8
+patch_margin_bottom = 8
+
+[node name="ProgressBar" type="ProgressBar" parent="HUD/NinePatchRect"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 13.0
+offset_top = 11.0
+offset_right = -13.0
+offset_bottom = -7.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1, 0.89)
+theme_override_styles/background = SubResource("StyleBoxTexture_71x63")
+theme_override_styles/fill = SubResource("StyleBoxTexture_oy7yb")
+max_value = 30.0
+step = 1.0
+value = 26.0
+
+[node name="TextureRect" type="TextureRect" parent="HUD"]
+visible = false
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -256.0
+offset_right = 515.0
+offset_bottom = 256.0
+grow_horizontal = 0
+scale = Vector2(0.31, 0.3)
+texture = ExtResource("20_snus0")
 
 [node name="Fisheye" type="CanvasLayer" parent="."]
 

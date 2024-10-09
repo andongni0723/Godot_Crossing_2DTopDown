@@ -1,0 +1,118 @@
+[gd_scene load_steps=14 format=3 uid="uid://bfu5m4hfq46m4"]
+
+[ext_resource type="Script" path="res://Scripts/Skill/ExplosiveBullet.cs" id="1_bypef"]
+[ext_resource type="PackedScene" uid="uid://clih3n3okb0e4" path="res://GameData/PlayerBullet.tscn" id="2_6771m"]
+[ext_resource type="PackedScene" uid="uid://xksrb2enrai6" path="res://GameData/Particle/BoomParticle.tscn" id="2_jg6pw"]
+[ext_resource type="PackedScene" uid="uid://edqvktuderac" path="res://GameData/Particle/WalkParticle.tscn" id="2_uido4"]
+[ext_resource type="Script" path="res://Scripts/Trail.cs" id="3_bdpye"]
+[ext_resource type="Texture2D" uid="uid://b2puw1d312dpt" path="res://Assets/Image/circle.png" id="4_hwir4"]
+
+[sub_resource type="Curve" id="Curve_3jidg"]
+max_value = 200.0
+_data = [Vector2(0.0234604, 200), 0.0, -1.1408, 0, 0, Vector2(0.991192, 114.329), -299.078, -299.078, 0, 0, Vector2(0.991202, 0), -2134.43, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_qetxw"]
+curve = SubResource("Curve_3jidg")
+
+[sub_resource type="Curve" id="Curve_uyg23"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_v317g"]
+curve = SubResource("Curve_uyg23")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_iodiu"]
+particle_flag_disable_z = true
+emission_shape = 6
+emission_ring_axis = Vector3(0, 0, 1)
+emission_ring_height = 2.08165e-12
+emission_ring_radius = 20.0
+emission_ring_inner_radius = 20.0
+radial_velocity_curve = SubResource("CurveTexture_qetxw")
+gravity = Vector3(2.08165e-12, 2.08165e-12, 2.08165e-12)
+scale_max = 10.0
+scale_curve = SubResource("CurveTexture_v317g")
+sub_emitter_keep_velocity = true
+
+[sub_resource type="Curve" id="Curve_08d5e"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_5ptu8"]
+radius = 19.0
+
+[node name="Explosive Bullet" type="RigidBody2D" node_paths=PackedStringArray("BoomTimer", "NewBulletPoints")]
+collision_layer = 2
+collision_mask = 28
+gravity_scale = 0.0
+lock_rotation = true
+continuous_cd = 1
+contact_monitor = true
+max_contacts_reported = 1
+script = ExtResource("1_bypef")
+Bullet = ExtResource("2_6771m")
+BoomTimer = NodePath("Boom Timer")
+NewBulletPoints = [NodePath("1"), NodePath("2"), NodePath("3"), NodePath("4"), NodePath("5"), NodePath("6"), NodePath("7"), NodePath("8")]
+BoomParticle = ExtResource("2_jg6pw")
+
+[node name="Walk Particle" parent="." instance=ExtResource("2_uido4")]
+position = Vector2(1, 2)
+process_material = SubResource("ParticleProcessMaterial_iodiu")
+
+[node name="Line2D" type="Line2D" parent="."]
+points = PackedVector2Array(-53, 1, -1, 1)
+width = 25.0
+width_curve = SubResource("Curve_08d5e")
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+script = ExtResource("3_bdpye")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.15, 0.15)
+texture = ExtResource("4_hwir4")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_5ptu8")
+one_way_collision_margin = 0.0
+
+[node name="Boom Timer" type="Timer" parent="."]
+wait_time = 0.5
+one_shot = true
+
+[node name="------- Explosive Point" type="Node" parent="."]
+
+[node name="1" type="Node2D" parent="."]
+position = Vector2(0, -25)
+rotation = -1.5708
+
+[node name="2" type="Node2D" parent="."]
+position = Vector2(19, -16)
+rotation = -0.785398
+scale = Vector2(1, 1)
+
+[node name="3" type="Node2D" parent="."]
+position = Vector2(24, 1.90735e-06)
+
+[node name="4" type="Node2D" parent="."]
+position = Vector2(18, 18)
+rotation = 0.785398
+
+[node name="5" type="Node2D" parent="."]
+position = Vector2(0, 25)
+rotation = 1.5708
+
+[node name="6" type="Node2D" parent="."]
+position = Vector2(-19, 19)
+rotation = 2.35619
+
+[node name="7" type="Node2D" parent="."]
+position = Vector2(-24, 0)
+rotation = 3.14159
+
+[node name="8" type="Node2D" parent="."]
+position = Vector2(-19, -17)
+rotation = -2.20959
+
+[connection signal="timeout" from="Boom Timer" to="." method="_on_boom_timer_timeout"]

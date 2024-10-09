@@ -35,10 +35,10 @@ public partial class Bullet : RigidBody2D
         
         // if colliding 
         _OnCollision(collisionDetection);
-        if(collisionDetection.GetCollider() as Node2D is IAttack hit)
-        {
-            hit.Damage(damage);
-        }
+        // if(collisionDetection.GetCollider() as Node2D is IAttack hit)
+        // {
+        //     hit.Damage(damage);
+        // }
     }
     
     private void _OnCollision(KinematicCollision2D collision)
@@ -51,10 +51,28 @@ public partial class Bullet : RigidBody2D
         if(collision.GetCollider() as Node2D is IAttack hit)
         {
             AudioManager.Instance.PlaySound(AudioManager.Instance.HitSound);
-            hit.Damage(damage);
             var newParticle = (GpuParticles2D)BoomParticle.Instantiate();
             newParticle.GlobalPosition = GlobalPosition;
             GetTree().Root.AddChild(newParticle);
+
+            hit.Damage(hit.Team switch
+            {
+                Team.Player => -1f,
+                Team.Enemy => 1,
+                _ => 1
+            });
+
+            switch (hit.Team)
+            {
+                case Team.Player:
+                    break;
+                case Team.Enemy:
+                    break;
+                case Team.Neutral:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
             
             QueueFree();
         }

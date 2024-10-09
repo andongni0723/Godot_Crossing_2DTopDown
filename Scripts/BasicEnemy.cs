@@ -7,8 +7,9 @@ public partial class BasicEnemy : CharacterBody2D, IAttack
     [Export] public float Speed = 100;
 
     private BaseEnemyAttack _enemyAttack;
-  
-	
+    public Team Team => Team.Enemy;
+
+
     private Node2D _target;
     private Vector2 _targetDirection;
 
@@ -29,7 +30,8 @@ public partial class BasicEnemy : CharacterBody2D, IAttack
         MoveAndSlide();
     }
 
-    public void Damage(int damage)
+
+    public void Damage(float damage)
     {
         GameManager.Instance.AddScore(1);
         QueueFree();
