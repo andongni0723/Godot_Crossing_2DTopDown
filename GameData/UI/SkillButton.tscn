@@ -1,0 +1,83 @@
+[gd_scene load_steps=5 format=3 uid="uid://crt35hjof2b63"]
+
+[ext_resource type="Texture2D" uid="uid://ethcbtnqmn5y" path="res://Assets/Image/out square.png" id="1_56gy5"]
+[ext_resource type="Texture2D" uid="uid://bvgfxwy8me1nj" path="res://Assets/Image/CeaselessCycle-light-icon.png" id="2_ruqsd"]
+[ext_resource type="FontFile" uid="uid://c5dr6r5wbd4bl" path="res://Font/Px437_IBM_EGA_8x8.ttf" id="4_6vnrf"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_yvoan"]
+font = ExtResource("4_6vnrf")
+font_size = 77
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="NinePatchRect" type="NinePatchRect" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -65.5
+offset_top = -62.5
+offset_right = 65.5
+offset_bottom = 62.5
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_56gy5")
+region_rect = Rect2(16, 16, 224, 224)
+patch_margin_left = 8
+patch_margin_top = 8
+patch_margin_right = 8
+patch_margin_bottom = 8
+
+[node name="Button" type="Button" parent="NinePatchRect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 961.0
+offset_bottom = 900.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.12, 0.12)
+icon = ExtResource("2_ruqsd")
+flat = true
+icon_alignment = 1
+
+[node name="ShortCut Panel" type="NinePatchRect" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -65.0
+offset_top = -104.0
+offset_right = 66.0
+offset_bottom = -71.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_56gy5")
+region_rect = Rect2(16, 16, 224, 224)
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+
+[node name="Label" type="Label" parent="ShortCut Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 393.0
+offset_bottom = 99.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.25, 0.25)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "1"
+label_settings = SubResource("LabelSettings_yvoan")
+horizontal_alignment = 1
+vertical_alignment = 1

@@ -8,6 +8,7 @@ public partial class CharacterShoot : Node2D
     [ExportCategory("Components")]
     [Export] public PackedScene Bullet;
     [Export] public PackedScene FireParticle;
+    [Export] public BulletBar BulletBar;
     [Export] public Node2D BulletSpawnPoint;
     
     
@@ -29,5 +30,7 @@ public partial class CharacterShoot : Node2D
         var newBoomParticle = (GpuParticles2D)FireParticle.Instantiate();
         newBoomParticle.GlobalPosition = BulletSpawnPoint.GlobalPosition;
         GetTree().Root.AddChild(newBoomParticle);
+        
+        BulletBar.UpdateValue((int)BulletBar.ProgressBar.Value - 1);
     }
 }

@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://Scripts/Character/CharacterShoot.cs" id="1_eyy5u"]
 [ext_resource type="Script" path="res://Scripts/Character/CharacterController.cs" id="1_n7en2"]
 [ext_resource type="PackedScene" uid="uid://bi8we04q2olxq" path="res://GameData/Particle/FireParticle.tscn" id="3_epco8"]
-[ext_resource type="PackedScene" uid="uid://bfu5m4hfq46m4" path="res://Skill/ExplosiveBullet.tscn" id="3_v6rpx"]
+[ext_resource type="PackedScene" uid="uid://bfu5m4hfq46m4" path="res://GameData/Skill/ExplosiveBullet.tscn" id="3_v6rpx"]
 [ext_resource type="Script" path="res://Scripts/Character/CharacterCrossing.cs" id="4_fkiu2"]
 [ext_resource type="PackedScene" uid="uid://edqvktuderac" path="res://GameData/Particle/WalkParticle.tscn" id="5_l85mg"]
 [ext_resource type="PackedScene" uid="uid://xksrb2enrai6" path="res://GameData/Particle/BoomParticle.tscn" id="6_8yxkf"]

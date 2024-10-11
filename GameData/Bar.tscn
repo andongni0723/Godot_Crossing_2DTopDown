@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://5u2ousqtq1cq"]
+[gd_scene load_steps=7 format=3 uid="uid://5u2ousqtq1cq"]
 
 [ext_resource type="Texture2D" uid="uid://ethcbtnqmn5y" path="res://Assets/Image/out square.png" id="1_2ff4h"]
+[ext_resource type="Script" path="res://GameData/UI/Bar.cs" id="1_hf7w0"]
 [ext_resource type="Texture2D" uid="uid://b750fv0n6fmmj" path="res://Assets/Image/white.png" id="2_mm3cu"]
 [ext_resource type="FontFile" uid="uid://c5dr6r5wbd4bl" path="res://Font/Px437_IBM_EGA_8x8.ttf" id="2_yea5x"]
 
@@ -8,16 +9,26 @@
 texture = ExtResource("2_mm3cu")
 region_rect = Rect2(-24, -24, 304, 304)
 
-[node name="Bar" type="Node2D"]
+[sub_resource type="LabelSettings" id="LabelSettings_q6uka"]
+font = ExtResource("2_yea5x")
+font_size = 62
+
+[node name="Bar" type="Control" node_paths=PackedStringArray("ProgressBar", "BarText")]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_hf7w0")
+ProgressBar = NodePath("NinePatchRect/ProgressBar")
+BarText = NodePath("Label")
 
 [node name="NinePatchRect" type="NinePatchRect" parent="."]
+layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -248.0
-offset_top = 34.0
-offset_right = -34.0
-offset_bottom = 92.0
+offset_left = -295.0
+offset_top = 1.0
+offset_right = -81.0
+offset_bottom = 59.0
 grow_horizontal = 0
 texture = ExtResource("1_2ff4h")
 region_rect = Rect2(16, 16, 224, 224)
@@ -38,10 +49,18 @@ offset_bottom = -7.0
 grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(1, 0.89)
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("2_yea5x")
 theme_override_styles/fill = SubResource("StyleBoxTexture_k4ydm")
 max_value = 30.0
 step = 1.0
 value = 24.0
+show_percentage = false
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = -64.0
+offset_top = 15.0
+offset_right = 60.0
+offset_bottom = 78.0
+scale = Vector2(0.5, 0.5)
+text = "50"
+label_settings = SubResource("LabelSettings_q6uka")

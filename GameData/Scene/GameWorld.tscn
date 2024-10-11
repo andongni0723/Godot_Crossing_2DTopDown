@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://ch1jqm4rvnnsw"]
+[gd_scene load_steps=34 format=3 uid="uid://ch1jqm4rvnnsw"]
 
 [ext_resource type="Script" path="res://Scripts/Utility/EventHandler.cs" id="1_66w2q"]
 [ext_resource type="Script" path="res://GameData/GameManager.cs" id="1_kqov4"]
@@ -19,8 +19,10 @@
 [ext_resource type="PackedScene" uid="uid://dy05lwofixtep" path="res://GameData/Tower.tscn" id="10_lvee7"]
 [ext_resource type="Shader" path="res://GameData/Shader/fisheye.gdshader" id="11_rnjr7"]
 [ext_resource type="Script" path="res://Scripts/Shader/Glitch.cs" id="16_303np"]
+[ext_resource type="PackedScene" uid="uid://crt35hjof2b63" path="res://GameData/UI/SkillButton.tscn" id="17_wk0ag"]
 [ext_resource type="Texture2D" uid="uid://b7fol31gv5uya" path="res://Assets/Image/Warning.png" id="19_y1lqn"]
 [ext_resource type="PackedScene" uid="uid://5u2ousqtq1cq" path="res://GameData/Bar.tscn" id="20_knj04"]
+[ext_resource type="Script" path="res://GameData/UI/BulletBar.cs" id="20_lsmar"]
 [ext_resource type="Texture2D" uid="uid://ethcbtnqmn5y" path="res://Assets/Image/out square.png" id="20_snus0"]
 [ext_resource type="Texture2D" uid="uid://b750fv0n6fmmj" path="res://Assets/Image/white.png" id="21_866gf"]
 
@@ -53,7 +55,7 @@ shader_parameter/setting_shake_power = 0.0
 shader_parameter/shake_rate = 1.0
 shader_parameter/shake_speed = 5.0
 shader_parameter/shake_block_size = 100.0
-shader_parameter/shake_color_rate = 0.005
+shader_parameter/shake_color_rate = 0.0
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_e5l6g"]
 texture = ExtResource("3_vbicv")
@@ -189,14 +191,11 @@ position = Vector2(9, -9)
 [node name="CharacterBody2D2" parent="." instance=ExtResource("5_ryv6p")]
 position = Vector2(-132, 141)
 
+[node name="CharacterShoot" parent="CharacterBody2D2" index="0" node_paths=PackedStringArray("BulletBar")]
+BulletBar = NodePath("../../World HUD/Bullet Bar")
+metadata/_edit_lock_ = true
+
 [node name="--- Test Node" type="Node" parent="."]
-
-[node name="World HUD" type="CanvasLayer" parent="."]
-follow_viewport_enabled = true
-
-[node name="Bullet Bar" parent="World HUD" instance=ExtResource("20_knj04")]
-modulate = Color(1, 1, 1, 0.266667)
-position = Vector2(572, -304)
 
 [node name="Chronic Aberration" type="CanvasLayer" parent="."]
 
@@ -240,6 +239,38 @@ grow_vertical = 2
 script = ExtResource("16_303np")
 PowerLabel = NodePath("../../HUD/Glitch Label")
 metadata/_edit_lock_ = true
+
+[node name="World HUD" type="CanvasLayer" parent="."]
+follow_viewport_enabled = true
+
+[node name="Bullet Bar" parent="World HUD" instance=ExtResource("20_knj04")]
+modulate = Color(1, 1, 1, 0.266667)
+offset_left = 535.0
+offset_top = -287.0
+offset_right = 535.0
+offset_bottom = -287.0
+scale = Vector2(0.6, 0.6)
+script = ExtResource("20_lsmar")
+
+[node name="Control" type="HBoxContainer" parent="World HUD"]
+offset_left = 329.0
+offset_top = 244.0
+offset_right = 677.0
+offset_bottom = 347.0
+scale = Vector2(0.54, 0.54)
+theme_override_constants/separation = 174
+
+[node name="Skill Buttons" parent="World HUD/Control" instance=ExtResource("17_wk0ag")]
+modulate = Color(1, 1, 1, 0.266667)
+layout_mode = 2
+
+[node name="Skill Buttons2" parent="World HUD/Control" instance=ExtResource("17_wk0ag")]
+modulate = Color(1, 1, 1, 0.266667)
+layout_mode = 2
+
+[node name="Skill Buttons3" parent="World HUD/Control" instance=ExtResource("17_wk0ag")]
+modulate = Color(1, 1, 1, 0.266667)
+layout_mode = 2
 
 [node name="HUD" type="CanvasLayer" parent="."]
 follow_viewport_scale = 2.0
@@ -352,3 +383,5 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 metadata/_edit_lock_ = true
+
+[editable path="CharacterBody2D2"]
