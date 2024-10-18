@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://ch1jqm4rvnnsw"]
+[gd_scene load_steps=39 format=3 uid="uid://ch1jqm4rvnnsw"]
 
 [ext_resource type="Script" path="res://Scripts/Utility/EventHandler.cs" id="1_66w2q"]
 [ext_resource type="Script" path="res://GameData/GameManager.cs" id="1_kqov4"]
@@ -9,14 +9,16 @@
 [ext_resource type="Texture2D" uid="uid://d1usn741aimqu" path="res://Assets/Image/black.png" id="3_vbicv"]
 [ext_resource type="PackedScene" uid="uid://cnf10knxyxvku" path="res://GameData/Wall.tscn" id="4_061o3"]
 [ext_resource type="AudioStream" uid="uid://b6sr2dqfg0f34" path="res://Assets/Audio/Sound/fire.wav" id="5_1l66c"]
-[ext_resource type="PackedScene" uid="uid://brsjcgbew1al3" path="res://GameData/Player.tscn" id="5_ryv6p"]
+[ext_resource type="PackedScene" uid="uid://brsjcgbew1al3" path="res://GameData/Player/Player.tscn" id="5_ryv6p"]
 [ext_resource type="AudioStream" uid="uid://ddw5og63q43um" path="res://Assets/Audio/Sound/hit_wall.wav" id="6_cogk4"]
+[ext_resource type="BehaviorTree" uid="uid://dfxefae064lmf" path="res://ai/tasks/enemy_spawn.tres" id="6_yj52x"]
+[ext_resource type="PackedScene" uid="uid://coffghg0m8ru1" path="res://GameData/MissileEnemy.tscn" id="7_4vmon"]
 [ext_resource type="AudioStream" uid="uid://ckopcoi2r8iuv" path="res://Assets/Audio/Sound/hit.wav" id="7_ixu4l"]
 [ext_resource type="FontFile" uid="uid://c5dr6r5wbd4bl" path="res://Font/Px437_IBM_EGA_8x8.ttf" id="7_spwim"]
 [ext_resource type="PackedScene" uid="uid://rdeb7gg1bsbk" path="res://GameData/BasicEnemy.tscn" id="8_joo00"]
 [ext_resource type="Shader" path="res://GameData/Shader/ChromicAberration.gdshader" id="9_c4jgw"]
 [ext_resource type="Shader" path="res://GameData/Shader/Glitch.gdshader" id="10_fn2j6"]
-[ext_resource type="PackedScene" uid="uid://dy05lwofixtep" path="res://GameData/Tower.tscn" id="10_lvee7"]
+[ext_resource type="PackedScene" uid="uid://dy05lwofixtep" path="res://GameData/Player/Tower.tscn" id="10_lvee7"]
 [ext_resource type="Shader" path="res://GameData/Shader/fisheye.gdshader" id="11_rnjr7"]
 [ext_resource type="Script" path="res://Scripts/Shader/Glitch.cs" id="16_303np"]
 [ext_resource type="PackedScene" uid="uid://crt35hjof2b63" path="res://GameData/UI/SkillButton.tscn" id="17_wk0ag"]
@@ -25,6 +27,10 @@
 [ext_resource type="Script" path="res://GameData/UI/BulletBar.cs" id="20_lsmar"]
 [ext_resource type="Texture2D" uid="uid://ethcbtnqmn5y" path="res://Assets/Image/out square.png" id="20_snus0"]
 [ext_resource type="Texture2D" uid="uid://b750fv0n6fmmj" path="res://Assets/Image/white.png" id="21_866gf"]
+[ext_resource type="PackedScene" uid="uid://l6317g2qgwpq" path="res://GameData/Player/Shield.tscn" id="28_ys5am"]
+[ext_resource type="PackedScene" uid="uid://dmrs8p6sk5vfi" path="res://GameData/Projectile/EnemyMissileBullet.tscn" id="29_gkxbi"]
+
+[sub_resource type="BlackboardPlan" id="BlackboardPlan_fm1rx"]
 
 [sub_resource type="Environment" id="Environment_qqc1k"]
 background_mode = 3
@@ -88,13 +94,16 @@ VersionLabel = NodePath("../HUD/Game Label")
 ScoreLabel = NodePath("../HUD/Score Labe")
 HealthLabel = NodePath("../HUD/Health Label")
 BlackPanel = NodePath("../HUD/Black Panel")
+metadata/_edit_lock_ = true
 
 [node name="EventHandler" type="Node2D" parent="."]
 script = ExtResource("1_66w2q")
+metadata/_edit_lock_ = true
 
 [node name="Camera Parent" type="Node2D" parent="."]
 position = Vector2(0, 1)
 script = ExtResource("2_hv4mp")
+metadata/_edit_lock_ = true
 
 [node name="Camera2D" type="Camera2D" parent="Camera Parent"]
 
@@ -107,6 +116,7 @@ RightSpawnAreas = Rect2(700, -450, 0, 900)
 BasicEnemy = ExtResource("8_joo00")
 SpawnTimer = NodePath("Spawn Timer")
 WaveTimer = NodePath("Wave Timer")
+metadata/_edit_lock_ = true
 
 [node name="Node2D" type="Node2D" parent="Enemy Spawn Manager"]
 position = Vector2(-700, -450)
@@ -119,6 +129,10 @@ one_shot = true
 wait_time = 0.7
 one_shot = true
 
+[node name="BTPlayer" type="BTPlayer" parent="Enemy Spawn Manager"]
+behavior_tree = ExtResource("6_yj52x")
+blackboard_plan = SubResource("BlackboardPlan_fm1rx")
+
 [node name="Audio Manager" type="Node2D" parent="." node_paths=PackedStringArray("BgmPlayer", "SfxPlayer", "EnemySfxPlayer")]
 script = ExtResource("3_a4mk5")
 BgmPlayer = NodePath("BGM Player")
@@ -128,6 +142,7 @@ FightBgm = ExtResource("3_0ihpa")
 FireSound = ExtResource("5_1l66c")
 HitWallSound = ExtResource("6_cogk4")
 HitSound = ExtResource("7_ixu4l")
+metadata/_edit_lock_ = true
 
 [node name="BGM Player" type="AudioStreamPlayer" parent="Audio Manager"]
 stream = ExtResource("3_0ihpa")
@@ -154,8 +169,10 @@ z_index = -1
 scale = Vector2(4.89844, 2.74609)
 texture = ExtResource("3_vbicv")
 offset = Vector2(-1, 2.08165e-12)
+metadata/_edit_lock_ = true
 
 [node name="Environment" type="Node2D" parent="."]
+metadata/_edit_lock_ = true
 
 [node name="Wall" parent="Environment" instance=ExtResource("4_061o3")]
 modulate = Color(0.32549, 0.32549, 0.32549, 1)
@@ -186,7 +203,10 @@ wallDirection = 3
 [node name="--- Character" type="Node" parent="."]
 
 [node name="Tower" parent="." instance=ExtResource("10_lvee7")]
-position = Vector2(9, -9)
+metadata/_edit_lock_ = true
+
+[node name="MisileEnemy" parent="." instance=ExtResource("7_4vmon")]
+position = Vector2(-470, -171)
 
 [node name="CharacterBody2D2" parent="." instance=ExtResource("5_ryv6p")]
 position = Vector2(-132, 141)
@@ -384,4 +404,25 @@ grow_horizontal = 2
 grow_vertical = 2
 metadata/_edit_lock_ = true
 
+[node name="Tower2" parent="." instance=ExtResource("28_ys5am")]
+position = Vector2(184, 152)
+
+[node name="Bullet" parent="." instance=ExtResource("29_gkxbi")]
+visible = false
+position = Vector2(-366, 93)
+
+[node name="Walk Particle" parent="Bullet" index="0"]
+visible = false
+
+[node name="Line2D" parent="Bullet" index="1"]
+visible = false
+
+[node name="Sprite2D" parent="Bullet" index="2"]
+visible = false
+
+[node name="CollisionShape2D" parent="Bullet" index="3"]
+visible = false
+debug_color = Color(0, 0.6, 0.701961, 0)
+
 [editable path="CharacterBody2D2"]
+[editable path="Bullet"]

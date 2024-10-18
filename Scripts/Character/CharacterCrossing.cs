@@ -11,7 +11,6 @@ public partial class CharacterCrossing : Node
     public override void _Ready()
     {
         Node parent = GetParent();
-        GD.Print("Parent Node: " + parent.GetType());
         _character = GetNode<CharacterController>("..");
         
         EventHandler.Instance.PlayerTouchWall += Crossing;

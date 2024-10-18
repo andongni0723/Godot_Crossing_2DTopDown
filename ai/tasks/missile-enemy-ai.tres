@@ -1,0 +1,70 @@
+[gd_resource type="BehaviorTree" load_steps=15 format=3 uid="uid://bq3jti5ccpctw"]
+
+[sub_resource type="BlackboardPlan" id="BlackboardPlan_w30k5"]
+var/BoundDistanceToAttack/name = &"BoundDistanceToAttack"
+var/BoundDistanceToAttack/type = 3
+var/BoundDistanceToAttack/value = 500.0
+var/BoundDistanceToAttack/hint = 0
+var/BoundDistanceToAttack/hint_string = ""
+
+[sub_resource type="BBVariant" id="BBVariant_wkb2b"]
+type = 3
+value_source = 1
+variable = &"BoundDistanceToAttack"
+resource_name = "$BoundDistanceToAttack"
+
+[sub_resource type="BTCheckAgentProperty" id="BTCheckAgentProperty_w0rui"]
+property = &"TargetDistance"
+check_type = 4
+value = SubResource("BBVariant_wkb2b")
+
+[sub_resource type="BBNode" id="BBNode_v51d7"]
+saved_value = NodePath(".")
+resource_name = "."
+
+[sub_resource type="BTCallMethod" id="BTCallMethod_1fm12"]
+node = SubResource("BBNode_v51d7")
+method = &"Move"
+custom_name = "Move()"
+
+[sub_resource type="BTSequence" id="BTSequence_xu25t"]
+custom_name = "Move Action"
+children = [SubResource("BTCheckAgentProperty_w0rui"), SubResource("BTCallMethod_1fm12")]
+
+[sub_resource type="BBVariant" id="BBVariant_5d818"]
+type = 3
+value_source = 1
+variable = &"BoundDistanceToAttack"
+resource_name = "$BoundDistanceToAttack"
+
+[sub_resource type="BTCheckAgentProperty" id="BTCheckAgentProperty_gig5l"]
+property = &"TargetDistance"
+check_type = 2
+value = SubResource("BBVariant_5d818")
+
+[sub_resource type="BBNode" id="BBNode_1cyxf"]
+saved_value = NodePath("EnemyAttack")
+resource_name = "EnemyAttack"
+
+[sub_resource type="BTCallMethod" id="BTCallMethod_sohlw"]
+node = SubResource("BBNode_1cyxf")
+method = &"Attack"
+custom_name = "Attack()"
+
+[sub_resource type="BTSequence" id="BTSequence_10a5o"]
+children = [SubResource("BTCheckAgentProperty_gig5l"), SubResource("BTCallMethod_sohlw")]
+
+[sub_resource type="BTCooldown" id="BTCooldown_6eja3"]
+duration = 3.0
+children = [SubResource("BTSequence_10a5o")]
+
+[sub_resource type="BTSequence" id="BTSequence_r8ymd"]
+custom_name = "Attack Action"
+children = [SubResource("BTCooldown_6eja3")]
+
+[sub_resource type="BTSelector" id="BTSelector_kbqcf"]
+children = [SubResource("BTSequence_xu25t"), SubResource("BTSequence_r8ymd")]
+
+[resource]
+blackboard_plan = SubResource("BlackboardPlan_w30k5")
+root_task = SubResource("BTSelector_kbqcf")

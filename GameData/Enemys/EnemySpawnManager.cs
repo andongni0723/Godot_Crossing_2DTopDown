@@ -27,13 +27,13 @@ public partial class EnemySpawnManager : Node2D
 
     public override void _Process(double delta)
     {
-        if(DebugMode) return;
-        WaveSpawn();
+        // if(DebugMode) return;
+        // WaveSpawn();
     }
 
     private void WaveSpawn()
     {
-        if (!WaveTimer.IsStopped()) return;
+        // if (!WaveTimer.IsStopped()) return;
 
         for (int i = 0; i < _random.Next(5, 10); i++)
         {
@@ -47,8 +47,24 @@ public partial class EnemySpawnManager : Node2D
         WaveTimer.Start();
 
     }
+    
+    
+    public Rect2 RandomSpawnArea()
+    {
+        var spawnAreas = new List<Rect2>() { UpSpawnAreas, DownSpawnAreas, LeftSpawnAreas, RightSpawnAreas };
+        var randomIndex = _random.Next(0, spawnAreas.Count);
+        return spawnAreas[randomIndex];
+    }
 
-    private void Spawn(Rect2 selectedArea)
+    public bool IsSpawnLeftOrRight(Rect2 currentSpawn) =>  currentSpawn == LeftSpawnAreas || currentSpawn == RightSpawnAreas;
+
+
+    // E 0:00:02:0170   callv: Error calling method from 'callv': 'Node2D(EnemySpawnManager.cs)::IsSpawnLeftOrRight': Method not found.
+    // <C++ 錯誤>       Method/function failed. Returning: Variant()
+    // <C++ 來源>       core/object/object.cpp:748 @ callv()
+
+    
+    public void Spawn(PackedScene enemy, Rect2 selectedArea)
     {
         if (!SpawnTimer.IsStopped()) return;
         SpawnTimer.Start();
@@ -59,11 +75,16 @@ public partial class EnemySpawnManager : Node2D
         Vector2 spawnPosition = new Vector2(xPos, yPos);
 
         // 實例化並設置敵人位置
-        var enemy = BasicEnemy.Instantiate() as BasicEnemy;
-        enemy!.GlobalPosition = spawnPosition;
+        var newEnemy = enemy.Instantiate() as BasicEnemy;
+        newEnemy!.GlobalPosition = spawnPosition;
 
         // 將敵人加入場景
-        GetTree().Root.AddChild(enemy);
+        GetTree().Root.CallDeferred("add_child", newEnemy); 
+    }
+    
+    private void Spawn(Rect2 selectedArea)
+    {
+        Spawn(BasicEnemy, selectedArea);
     }
     
     public override void _Draw()

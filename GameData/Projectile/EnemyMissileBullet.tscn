@@ -1,0 +1,90 @@
+[gd_scene load_steps=14 format=3 uid="uid://dmrs8p6sk5vfi"]
+
+[ext_resource type="Script" path="res://Scripts/Enemy/MissileBullet.cs" id="1_l705u"]
+[ext_resource type="PackedScene" uid="uid://xksrb2enrai6" path="res://GameData/Particle/BoomParticle.tscn" id="2_413jm"]
+[ext_resource type="PackedScene" uid="uid://edqvktuderac" path="res://GameData/Particle/WalkParticle.tscn" id="3_h547m"]
+[ext_resource type="Script" path="res://Scripts/Trail.cs" id="4_0l2x6"]
+[ext_resource type="Texture2D" uid="uid://ctuvrwiy0cpbh" path="res://GameData/light/normal-spot-light.tres" id="4_qrwpf"]
+[ext_resource type="Texture2D" uid="uid://b2puw1d312dpt" path="res://Assets/Image/circle.png" id="5_fnicl"]
+
+[sub_resource type="Curve" id="Curve_cevfr"]
+max_value = 200.0
+_data = [Vector2(0.0234604, 200), 0.0, -1.1408, 0, 0, Vector2(0.991192, 114.329), -299.078, -299.078, 0, 0, Vector2(0.991202, 0), -2134.43, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_tc3s0"]
+curve = SubResource("Curve_cevfr")
+
+[sub_resource type="Curve" id="Curve_s2wom"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_ajf8h"]
+curve = SubResource("Curve_s2wom")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_mnmao"]
+particle_flag_disable_z = true
+emission_shape_scale = Vector3(0.17, 0.27, 0.42)
+emission_shape = 6
+emission_ring_axis = Vector3(0, 0, 1)
+emission_ring_height = 2.08165e-12
+emission_ring_radius = 20.0
+emission_ring_inner_radius = 20.0
+radial_velocity_curve = SubResource("CurveTexture_tc3s0")
+gravity = Vector3(2.08165e-12, 2.08165e-12, 2.08165e-12)
+scale_max = 10.0
+scale_curve = SubResource("CurveTexture_ajf8h")
+sub_emitter_keep_velocity = true
+
+[sub_resource type="Curve" id="Curve_l7eo6"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_tkj4h"]
+radius = 19.0
+
+[node name="Bullet" type="RigidBody2D" groups=["Bullet"]]
+collision_layer = 0
+collision_mask = 34
+gravity_scale = 1.66533e-16
+lock_rotation = true
+continuous_cd = 1
+contact_monitor = true
+max_contacts_reported = 1
+script = ExtResource("1_l705u")
+BoomParticle = ExtResource("2_413jm")
+Speed = 500.0
+
+[node name="Walk Particle" parent="." instance=ExtResource("3_h547m")]
+modulate = Color(1, 0.403922, 0.00784314, 1)
+position = Vector2(1, 2)
+process_material = SubResource("ParticleProcessMaterial_mnmao")
+
+[node name="Line2D" type="Line2D" parent="."]
+points = PackedVector2Array(-53, 1, -1, 1)
+width = 9.46
+width_curve = SubResource("Curve_l7eo6")
+default_color = Color(1, 0.403922, 0, 1)
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+script = ExtResource("4_0l2x6")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(0.984314, 0.32549, 0.121569, 1)
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("5_fnicl")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+scale = Vector2(0.67, 0.67)
+shape = SubResource("CircleShape2D_tkj4h")
+one_way_collision_margin = 0.0
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+visible = false
+scale = Vector2(2.53125, 2.5)
+color = Color(1, 0.768627, 0.0117647, 1)
+texture = ExtResource("4_qrwpf")
+texture_scale = 1.57
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

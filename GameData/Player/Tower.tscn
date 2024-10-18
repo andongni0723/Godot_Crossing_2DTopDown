@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://6rcpaagmx1os" path="res://Assets/Image/triangle.png" id="2_bs45u"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0ywen"]
-size = Vector2(124, 126)
+size = Vector2(124, 124)
 
 [node name="Tower" type="RigidBody2D" node_paths=PackedStringArray("HealCooldownTimer")]
 collision_layer = 18

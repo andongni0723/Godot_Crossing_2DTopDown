@@ -12,36 +12,49 @@ public partial class Bullet : RigidBody2D
     // [Export] public Vector2 Direction = Vector2.Right;
     
     // private Area2D _area;
-    private float _collisionCount = 0;
+    private float _collisionCount;
     private Vector2 _point;
 
-    // private Vector2 _localYDirection;
     private Vector2 _contactLocalNormal;
-    
+    protected Vector2 Velocity;
+ 
 
     public override void _Ready()
     {
-        _point = Position;
-        _velocity = GlobalTransform.Y.Normalized() * Speed;
-
+        Move(0);
     }
 
-    private Vector2 _velocity;
+    
     public override void _PhysicsProcess(double delta)
     {
-        var collisionDetection = MoveAndCollide(_velocity * (float)delta);
-        
-        if (collisionDetection == null) return;
-        
-        // if colliding 
-        _OnCollision(collisionDetection);
-        // if(collisionDetection.GetCollider() as Node2D is IAttack hit)
-        // {
-        //     hit.Damage(damage);
-        // }
+        CollisionCheck((float)delta);
+    }
+
+    protected virtual void Move(float delta)
+    {
+        _point = Position;
+        Velocity = GlobalTransform.Y.Normalized() * Speed; 
     }
     
-    private void _OnCollision(KinematicCollision2D collision)
+
+    private void CollisionCheck(float delta)
+    {
+        var collisionDetection = MoveAndCollide(Velocity * delta);
+        if (collisionDetection == null) return;
+        // if colliding 
+        _OnCollision(collisionDetection); 
+    }
+
+    protected void PlayHitVFX()
+    {
+        AudioManager.Instance.PlaySound(AudioManager.Instance.HitSound);
+        var newParticle = (GpuParticles2D)BoomParticle.Instantiate();
+        newParticle.GlobalPosition = GlobalPosition;
+        GetTree().Root.AddChild(newParticle); 
+    }
+    
+    
+    protected virtual void _OnCollision(KinematicCollision2D collision)
     {
         _collisionCount++;
         
@@ -50,10 +63,7 @@ public partial class Bullet : RigidBody2D
         // hit object can attack
         if(collision.GetCollider() as Node2D is IAttack hit)
         {
-            AudioManager.Instance.PlaySound(AudioManager.Instance.HitSound);
-            var newParticle = (GpuParticles2D)BoomParticle.Instantiate();
-            newParticle.GlobalPosition = GlobalPosition;
-            GetTree().Root.AddChild(newParticle);
+            PlayHitVFX();
 
             hit.Damage(hit.Team switch
             {
@@ -61,18 +71,6 @@ public partial class Bullet : RigidBody2D
                 Team.Enemy => 1,
                 _ => 1
             });
-
-            switch (hit.Team)
-            {
-                case Team.Player:
-                    break;
-                case Team.Enemy:
-                    break;
-                case Team.Neutral:
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
             
             QueueFree();
         }
@@ -91,7 +89,7 @@ public partial class Bullet : RigidBody2D
         else
         {
             AudioManager.Instance.PlaySound(AudioManager.Instance.HitWallSound);
-            _velocity = _velocity.Bounce(collision.GetNormal());
+            Velocity = Velocity.Bounce(collision.GetNormal());
         }
     } 
 }

@@ -1,0 +1,30 @@
+[gd_resource type="BlackboardPlan" load_steps=3 format=3 uid="uid://bidhdwmv6sjt7"]
+
+[ext_resource type="PackedScene" uid="uid://rdeb7gg1bsbk" path="res://GameData/BasicEnemy.tscn" id="1_6bddi"]
+[ext_resource type="PackedScene" uid="uid://coffghg0m8ru1" path="res://GameData/MissileEnemy.tscn" id="2_55dnm"]
+
+[resource]
+var/BasicEnemy/name = &"BasicEnemy"
+var/BasicEnemy/type = 24
+var/BasicEnemy/value = ExtResource("1_6bddi")
+var/BasicEnemy/hint = 0
+var/BasicEnemy/hint_string = ""
+var/MissileEnemy/name = &"MissileEnemy"
+var/MissileEnemy/type = 24
+var/MissileEnemy/value = ExtResource("2_55dnm")
+var/MissileEnemy/hint = 0
+var/MissileEnemy/hint_string = ""
+var/_SpawnObject/name = &"_SpawnObject"
+var/_SpawnObject/type = 24
+var/_SpawnObject/hint = 0
+var/_SpawnObject/hint_string = ""
+var/_ResultDirection/name = &"_ResultDirection"
+var/_ResultDirection/type = 7
+var/_ResultDirection/value = Rect2(0, 0, 0, 0)
+var/_ResultDirection/hint = 0
+var/_ResultDirection/hint_string = ""
+var/_isLeftOrRight/name = &"_isLeftOrRight"
+var/_isLeftOrRight/type = 1
+var/_isLeftOrRight/value = true
+var/_isLeftOrRight/hint = 0
+var/_isLeftOrRight/hint_string = ""

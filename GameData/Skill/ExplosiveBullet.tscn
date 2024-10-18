@@ -1,7 +1,7 @@
 [gd_scene load_steps=14 format=3 uid="uid://bfu5m4hfq46m4"]
 
 [ext_resource type="Script" path="res://Scripts/Skill/ExplosiveBullet.cs" id="1_uptn3"]
-[ext_resource type="PackedScene" uid="uid://clih3n3okb0e4" path="res://GameData/PlayerBullet.tscn" id="2_wm6jh"]
+[ext_resource type="PackedScene" uid="uid://clih3n3okb0e4" path="res://GameData/Projectile/PlayerBullet.tscn" id="2_wm6jh"]
 [ext_resource type="PackedScene" uid="uid://xksrb2enrai6" path="res://GameData/Particle/BoomParticle.tscn" id="3_wuhvy"]
 [ext_resource type="PackedScene" uid="uid://edqvktuderac" path="res://GameData/Particle/WalkParticle.tscn" id="4_pq6k6"]
 [ext_resource type="Script" path="res://Scripts/Trail.cs" id="5_rixol"]

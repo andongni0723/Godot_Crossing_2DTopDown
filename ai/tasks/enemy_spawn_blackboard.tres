@@ -1,0 +1,8 @@
+[gd_resource type="BlackboardPlan" format=3 uid="uid://b1bpb3cs8sebj"]
+
+[resource]
+var/isProcess/name = &"isProcess"
+var/isProcess/type = 1
+var/isProcess/value = false
+var/isProcess/hint = 0
+var/isProcess/hint_string = ""

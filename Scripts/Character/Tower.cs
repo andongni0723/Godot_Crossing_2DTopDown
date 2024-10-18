@@ -14,6 +14,7 @@ public partial class Tower : Node2D, IAttack
     public override void _Ready()
     {
         HealCooldownTimer.Timeout += _Heal;
+        _maxHealth = Health;
     }
 
     private void _Heal()

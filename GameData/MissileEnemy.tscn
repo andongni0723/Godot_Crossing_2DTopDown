@@ -1,0 +1,110 @@
+[gd_scene load_steps=12 format=3 uid="uid://coffghg0m8ru1"]
+
+[ext_resource type="Script" path="res://GameData/Enemys/MissileEnemy.cs" id="1_4t782"]
+[ext_resource type="Script" path="res://GameData/Enemys/MissileEnemyAttack.cs" id="2_wvjiw"]
+[ext_resource type="PackedScene" uid="uid://pmjqm1hboolg" path="res://GameData/Enemys/EnemyBasicAttackVFX.tscn" id="3_hf0u0"]
+[ext_resource type="PackedScene" uid="uid://dmrs8p6sk5vfi" path="res://GameData/Projectile/EnemyMissileBullet.tscn" id="3_q7r7m"]
+[ext_resource type="Texture2D" uid="uid://6rcpaagmx1os" path="res://Assets/Image/triangle.png" id="4_wccsd"]
+[ext_resource type="Texture2D" uid="uid://b750fv0n6fmmj" path="res://Assets/Image/white.png" id="5_312fw"]
+[ext_resource type="Texture2D" uid="uid://ctuvrwiy0cpbh" path="res://GameData/light/normal-spot-light.tres" id="6_emnqw"]
+[ext_resource type="BehaviorTree" uid="uid://bq3jti5ccpctw" path="res://ai/tasks/missile-enemy-ai.tres" id="7_03yuf"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bfutb"]
+size = Vector2(72, 72)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_2wbnh"]
+radius = 81.2219
+
+[sub_resource type="BlackboardPlan" id="BlackboardPlan_7l2wd"]
+var/BoundDistanceToAttack/name = &"BoundDistanceToAttack"
+var/BoundDistanceToAttack/type = 3
+var/BoundDistanceToAttack/value = 450.0
+var/BoundDistanceToAttack/hint = 0
+var/BoundDistanceToAttack/hint_string = ""
+
+[node name="BasicEnemy" type="CharacterBody2D" groups=["Enemy"]]
+position = Vector2(7, 0)
+collision_layer = 8
+collision_mask = 11
+script = ExtResource("1_4t782")
+Health = 5.0
+
+[node name="EnemyAttack" type="Node" parent="." node_paths=PackedStringArray("FirePoints", "AttackTimer")]
+script = ExtResource("2_wvjiw")
+MissileBullet = ExtResource("3_q7r7m")
+FirePoints = [NodePath("../Fire Point"), NodePath("../Fire Point2"), NodePath("../FirePoint3")]
+FireRound = 4
+AttackVfx = ExtResource("3_hf0u0")
+AttackTimer = NodePath("../Attack Timer")
+
+[node name="arrow2" type="Sprite2D" parent="."]
+self_modulate = Color(1, 0.113725, 0, 1)
+position = Vector2(56, -1.56483e-13)
+rotation = 1.5708
+scale = Vector2(0.0896, 0.0896)
+texture = ExtResource("4_wccsd")
+
+[node name="cube" type="Sprite2D" parent="."]
+self_modulate = Color(1, 0.113725, 0, 1)
+scale = Vector2(0.28, 0.28)
+texture = ExtResource("5_312fw")
+
+[node name="PointLight2D" type="PointLight2D" parent="cube"]
+scale = Vector2(25, 25)
+color = Color(1, 0, 0, 1)
+range_z_max = -1
+range_layer_max = 100
+texture = ExtResource("6_emnqw")
+texture_scale = 50.0
+
+[node name="cube2" type="Sprite2D" parent="cube"]
+self_modulate = Color(1, 0.113725, 0, 1)
+position = Vector2(-35.7143, -171.883)
+scale = Vector2(1.28348, 0.2)
+texture = ExtResource("5_312fw")
+
+[node name="cube" type="Sprite2D" parent="cube"]
+self_modulate = Color(1, 0.113725, 0, 1)
+position = Vector2(-174.933, 6.0749)
+rotation = 1.5708
+scale = Vector2(1.50302, 0.2)
+texture = ExtResource("5_312fw")
+
+[node name="cube3" type="Sprite2D" parent="cube"]
+self_modulate = Color(1, 0.113725, 0, 1)
+position = Vector2(-37.4857, 175)
+scale = Vector2(1.26964, 0.2)
+texture = ExtResource("5_312fw")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="." groups=["Enemy"]]
+shape = SubResource("RectangleShape2D_bfutb")
+
+[node name="Attack Area" type="Area2D" parent="." groups=["Enemy"]]
+position = Vector2(0, 1)
+collision_layer = 8
+collision_mask = 19
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Attack Area" groups=["Enemy"]]
+shape = SubResource("CircleShape2D_2wbnh")
+debug_color = Color(0, 0.6, 0.701961, 0)
+metadata/_edit_lock_ = true
+
+[node name="Attack Timer" type="Timer" parent="."]
+one_shot = true
+
+[node name="BTPlayer" type="BTPlayer" parent="."]
+behavior_tree = ExtResource("7_03yuf")
+blackboard_plan = SubResource("BlackboardPlan_7l2wd")
+
+[node name="Fire Point" type="Node2D" parent="."]
+position = Vector2(72, -33)
+
+[node name="Fire Point2" type="Node2D" parent="."]
+position = Vector2(72, 0)
+
+[node name="FirePoint3" type="Node2D" parent="."]
+position = Vector2(71, 34)
+
+[connection signal="body_entered" from="Attack Area" to="EnemyAttack" method="_on_attack_area_body_entered"]
+[connection signal="body_exited" from="Attack Area" to="EnemyAttack" method="_on_attack_area_body_exited"]

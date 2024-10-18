@@ -1,0 +1,47 @@
+[gd_resource type="BehaviorTree" load_steps=13 format=3 uid="uid://dfxefae064lmf"]
+
+[ext_resource type="BlackboardPlan" uid="uid://b1bpb3cs8sebj" path="res://ai/tasks/enemy_spawn_blackboard.tres" id="1_3aium"]
+[ext_resource type="BehaviorTree" uid="uid://cwjvbnww3e0cj" path="res://ai/tasks/each_enemy_spawn.tres" id="1_7i713"]
+
+[sub_resource type="BBVariant" id="BBVariant_r1d5y"]
+type = 1
+saved_value = true
+resource_name = "true"
+
+[sub_resource type="BTCheckVar" id="BTCheckVar_t2x8n"]
+variable = &"isProcess"
+value = SubResource("BBVariant_r1d5y")
+custom_name = "isProcess"
+
+[sub_resource type="BlackboardPlan" id="BlackboardPlan_irvuo"]
+
+[sub_resource type="BTSubtree" id="BTSubtree_0poi3"]
+subtree = ExtResource("1_7i713")
+blackboard_plan = SubResource("BlackboardPlan_irvuo")
+custom_name = "Each Spawning"
+
+[sub_resource type="BTDelay" id="BTDelay_urvfk"]
+seconds = 0.3
+children = [SubResource("BTSubtree_0poi3")]
+
+[sub_resource type="BTProbability" id="BTProbability_47ifb"]
+children = [SubResource("BTDelay_urvfk")]
+
+[sub_resource type="BTRepeat" id="BTRepeat_fve5j"]
+times = 15
+children = [SubResource("BTProbability_47ifb")]
+
+[sub_resource type="BTSequence" id="BTSequence_uaeni"]
+custom_name = "Wave Spawning"
+children = [SubResource("BTRepeat_fve5j")]
+
+[sub_resource type="BTCooldown" id="BTCooldown_6muga"]
+duration = 0.7
+children = [SubResource("BTSequence_uaeni")]
+
+[sub_resource type="BTSequence" id="BTSequence_px1vb"]
+children = [SubResource("BTCheckVar_t2x8n"), SubResource("BTCooldown_6muga")]
+
+[resource]
+blackboard_plan = ExtResource("1_3aium")
+root_task = SubResource("BTSequence_px1vb")

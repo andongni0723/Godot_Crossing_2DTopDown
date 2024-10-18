@@ -1,0 +1,105 @@
+[gd_resource type="BehaviorTree" load_steps=22 format=3 uid="uid://cwjvbnww3e0cj"]
+
+[ext_resource type="BlackboardPlan" uid="uid://bidhdwmv6sjt7" path="res://ai/tasks/each_spawn_blackboard.tres" id="1_rfk1b"]
+
+[sub_resource type="BBNode" id="BBNode_vjlm3"]
+saved_value = NodePath("Enemy Spawn Manager")
+resource_name = "Enemy Spawn Manager"
+
+[sub_resource type="BTCallMethod" id="BTCallMethod_id62h"]
+node = SubResource("BBNode_vjlm3")
+method = &"RandomSpawnArea"
+result_var = &"_ResultDirection"
+custom_name = "random choose area"
+
+[sub_resource type="BBVariant" id="BBVariant_aa3cc"]
+type = 24
+value_source = 1
+variable = &"BasicEnemy"
+resource_name = "$BasicEnemy"
+
+[sub_resource type="BTSetVar" id="BTSetVar_8xbn1"]
+variable = &"_SpawnObject"
+value = SubResource("BBVariant_aa3cc")
+
+[sub_resource type="BTSequence" id="BTSequence_hjyb2"]
+custom_name = "BasicEnemy"
+children = [SubResource("BTSetVar_8xbn1")]
+metadata/_weight_ = 8.0
+
+[sub_resource type="BBVariant" id="BBVariant_s6vcb"]
+value_source = 1
+variable = &"_ResultDirection"
+resource_name = "$_ResultDirection"
+
+[sub_resource type="BBNode" id="BBNode_ms0p3"]
+saved_value = NodePath("Enemy Spawn Manager")
+resource_name = "Enemy Spawn Manager"
+
+[sub_resource type="BTCallMethod" id="BTCallMethod_4yrag"]
+node = SubResource("BBNode_ms0p3")
+method = &"IsSpawnLeftOrRight"
+result_var = &"_isLeftOrRight"
+args = Array[BBVariant]([SubResource("BBVariant_s6vcb")])
+custom_name = "get is left or right "
+
+[sub_resource type="BBVariant" id="BBVariant_osv4u"]
+type = 1
+saved_value = true
+resource_name = "true"
+
+[sub_resource type="BTCheckVar" id="BTCheckVar_pgu53"]
+variable = &"_isLeftOrRight"
+value = SubResource("BBVariant_osv4u")
+custom_name = "is Left or Right"
+
+[sub_resource type="BBVariant" id="BBVariant_868l0"]
+type = 24
+value_source = 1
+variable = &"MissileEnemy"
+resource_name = "$MissileEnemy"
+
+[sub_resource type="BTSetVar" id="BTSetVar_35c18"]
+variable = &"_SpawnObject"
+value = SubResource("BBVariant_868l0")
+
+[sub_resource type="BTSequence" id="BTSequence_brei6"]
+custom_name = "MissileEnemy"
+children = [SubResource("BTCallMethod_4yrag"), SubResource("BTCheckVar_pgu53"), SubResource("BTSetVar_35c18")]
+metadata/_weight_ = 2.0
+
+[sub_resource type="BTProbabilitySelector" id="BTProbabilitySelector_ovx2o"]
+custom_name = "select enemy type"
+children = [SubResource("BTSequence_hjyb2"), SubResource("BTSequence_brei6")]
+
+[sub_resource type="BTRepeatUntilSuccess" id="BTRepeatUntilSuccess_g54vt"]
+children = [SubResource("BTProbabilitySelector_ovx2o")]
+
+[sub_resource type="BBVariant" id="BBVariant_wemct"]
+type = 24
+value_source = 1
+variable = &"_SpawnObject"
+resource_name = "$_SpawnObject"
+
+[sub_resource type="BBVariant" id="BBVariant_5g7e5"]
+type = 7
+value_source = 1
+variable = &"_ResultDirection"
+resource_name = "$_ResultDirection"
+
+[sub_resource type="BBNode" id="BBNode_c46m0"]
+saved_value = NodePath("Enemy Spawn Manager")
+resource_name = "Enemy Spawn Manager"
+
+[sub_resource type="BTCallMethod" id="BTCallMethod_bqdlo"]
+node = SubResource("BBNode_c46m0")
+method = &"Spawn"
+args = Array[BBVariant]([SubResource("BBVariant_wemct"), SubResource("BBVariant_5g7e5")])
+custom_name = "Spawn"
+
+[sub_resource type="BTSequence" id="BTSequence_63b7s"]
+children = [SubResource("BTCallMethod_id62h"), SubResource("BTRepeatUntilSuccess_g54vt"), SubResource("BTCallMethod_bqdlo")]
+
+[resource]
+blackboard_plan = ExtResource("1_rfk1b")
+root_task = SubResource("BTSequence_63b7s")
