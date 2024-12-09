@@ -14,6 +14,7 @@ lock_rotation = true
 freeze = true
 freeze_mode = 1
 script = ExtResource("1_7huxe")
+Radius = 150.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 rotation = 1.5708

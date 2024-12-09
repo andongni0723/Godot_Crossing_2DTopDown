@@ -3,7 +3,8 @@ using System;
 
 public partial class CharacterController : CharacterBody2D
 {
-	[ExportCategory("Components")]
+	[ExportCategory("Components")] 
+	[Export] public CharacterDetailsResource CharacterDetails;
 	public CharacterBody2D body;
 	private Vector2 _mousePosition;
 	private CharacterShoot _characterShoot;
@@ -31,6 +32,7 @@ public partial class CharacterController : CharacterBody2D
 	{
 		_Rotate();
 		_Shoot();
+		_Reload();
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -60,5 +62,11 @@ public partial class CharacterController : CharacterBody2D
 	{
 		if(Input.IsActionJustPressed("shoot")) 
 			_characterShoot.ShootAction();
+	}
+
+	private void _Reload()
+	{
+		if(Input.IsActionJustPressed("reload")) 
+			_characterShoot.ReloadAction();
 	}
 }

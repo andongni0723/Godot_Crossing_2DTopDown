@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=3 uid="uid://ch1jqm4rvnnsw"]
+[gd_scene load_steps=40 format=3 uid="uid://ch1jqm4rvnnsw"]
 
 [ext_resource type="Script" path="res://Scripts/Utility/EventHandler.cs" id="1_66w2q"]
 [ext_resource type="Script" path="res://GameData/GameManager.cs" id="1_kqov4"]
@@ -20,6 +20,7 @@
 [ext_resource type="Shader" path="res://GameData/Shader/Glitch.gdshader" id="10_fn2j6"]
 [ext_resource type="PackedScene" uid="uid://dy05lwofixtep" path="res://GameData/Player/Tower.tscn" id="10_lvee7"]
 [ext_resource type="Shader" path="res://GameData/Shader/fisheye.gdshader" id="11_rnjr7"]
+[ext_resource type="AudioStream" uid="uid://cmgsmi5q3x8vi" path="res://Assets/Audio/Sound/reload_sound.wav" id="12_yb8tp"]
 [ext_resource type="Script" path="res://Scripts/Shader/Glitch.cs" id="16_303np"]
 [ext_resource type="PackedScene" uid="uid://crt35hjof2b63" path="res://GameData/UI/SkillButton.tscn" id="17_wk0ag"]
 [ext_resource type="Texture2D" uid="uid://b7fol31gv5uya" path="res://Assets/Image/Warning.png" id="19_y1lqn"]
@@ -133,21 +134,27 @@ one_shot = true
 behavior_tree = ExtResource("6_yj52x")
 blackboard_plan = SubResource("BlackboardPlan_fm1rx")
 
-[node name="Audio Manager" type="Node2D" parent="." node_paths=PackedStringArray("BgmPlayer", "SfxPlayer", "EnemySfxPlayer")]
+[node name="Audio Manager" type="Node2D" parent="." node_paths=PackedStringArray("BgmPlayer", "SfxPlayer", "ImportanceSfxPlayer", "EnemySfxPlayer")]
 script = ExtResource("3_a4mk5")
 BgmPlayer = NodePath("BGM Player")
 SfxPlayer = NodePath("SFX Player")
+ImportanceSfxPlayer = NodePath("SFX Player Importance")
 EnemySfxPlayer = NodePath("Enemu SFX Player")
 FightBgm = ExtResource("3_0ihpa")
 FireSound = ExtResource("5_1l66c")
 HitWallSound = ExtResource("6_cogk4")
 HitSound = ExtResource("7_ixu4l")
+ReloadSound = ExtResource("12_yb8tp")
 metadata/_edit_lock_ = true
 
 [node name="BGM Player" type="AudioStreamPlayer" parent="Audio Manager"]
 stream = ExtResource("3_0ihpa")
 autoplay = true
 parameters/looping = true
+
+[node name="SFX Player Importance" type="AudioStreamPlayer" parent="Audio Manager"]
+volume_db = -5.0
+autoplay = true
 
 [node name="SFX Player" type="AudioStreamPlayer" parent="Audio Manager"]
 volume_db = -5.0

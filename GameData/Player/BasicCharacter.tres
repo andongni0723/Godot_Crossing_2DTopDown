@@ -1,0 +1,11 @@
+[gd_resource type="Resource" load_steps=2 format=3 uid="uid://dbkvsso4a2enr"]
+
+[ext_resource type="Script" path="res://Scripts/Game Resources/CharacterDetailsResource.cs" id="1_f16r7"]
+
+[resource]
+script = ExtResource("1_f16r7")
+CharacterName = "Basic Character"
+CharacterDescription = ""
+ClipBulletSize = 20
+ReloadTime = 1.0
+FireRate = 0.0

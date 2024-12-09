@@ -1,7 +1,8 @@
-[gd_scene load_steps=13 format=3 uid="uid://brsjcgbew1al3"]
+[gd_scene load_steps=14 format=3 uid="uid://brsjcgbew1al3"]
 
 [ext_resource type="Script" path="res://Scripts/Character/CharacterShoot.cs" id="1_eyy5u"]
 [ext_resource type="Script" path="res://Scripts/Character/CharacterController.cs" id="1_n7en2"]
+[ext_resource type="Resource" uid="uid://dbkvsso4a2enr" path="res://GameData/Player/BasicCharacter.tres" id="2_2uo3j"]
 [ext_resource type="PackedScene" uid="uid://bi8we04q2olxq" path="res://GameData/Particle/FireParticle.tscn" id="3_epco8"]
 [ext_resource type="PackedScene" uid="uid://bfu5m4hfq46m4" path="res://GameData/Skill/ExplosiveBullet.tscn" id="3_v6rpx"]
 [ext_resource type="Script" path="res://Scripts/Character/CharacterCrossing.cs" id="4_fkiu2"]
@@ -29,19 +30,25 @@ collision_layer = 3
 collision_mask = 28
 platform_wall_layers = 4
 script = ExtResource("1_n7en2")
+CharacterDetails = ExtResource("2_2uo3j")
 MaxSpeed = 350.0
 
-[node name="CharacterShoot" type="Node2D" parent="." node_paths=PackedStringArray("BulletSpawnPoint")]
+[node name="CharacterShoot" type="Node2D" parent="." node_paths=PackedStringArray("CharacterController", "BulletSpawnPoint", "ReloadTimer")]
 script = ExtResource("1_eyy5u")
+CharacterController = NodePath("..")
 Bullet = ExtResource("3_v6rpx")
 FireParticle = ExtResource("3_epco8")
 BulletSpawnPoint = NodePath("../Arrow")
+ReloadTimer = NodePath("../Shoot Reload Timer")
 BulletSpeed = 800.0
 
 [node name="CharacterCrossing" type="Node2D" parent="." node_paths=PackedStringArray("CrossingCooldownTimer")]
 script = ExtResource("4_fkiu2")
 CrossingParticle = ExtResource("6_8yxkf")
 CrossingCooldownTimer = NodePath("../Crossing Cooldown Timer")
+
+[node name="Shoot Reload Timer" type="Timer" parent="."]
+one_shot = true
 
 [node name="Crossing Cooldown Timer" type="Timer" parent="."]
 one_shot = true
@@ -72,3 +79,5 @@ texture = ExtResource("7_a3tf2")
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="."]
 position = Vector2(-4.54747e-12, -5.96046e-08)
 shape = SubResource("CircleShape2D_0jyln")
+
+[connection signal="timeout" from="Shoot Reload Timer" to="CharacterShoot" method="_on_shoot_reload_timer_timeout"]
