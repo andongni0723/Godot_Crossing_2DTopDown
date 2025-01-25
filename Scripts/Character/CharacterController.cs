@@ -14,29 +14,35 @@ public partial class CharacterController : CharacterBody2D
 	[ExportCategory("Settings")]
 	[Export] public float MaxSpeed = 200;
 	
+	private bool _initialDone = false;
 	private float _acceleration;
 
 
 	public override void _Ready()
 	{
-		// body = GetNode<CharacterBody2D>("Player/CharacterBody2D");
 		body = GetNode<CharacterBody2D>(".");
 
 		// body = this;
 		_characterShoot = GetNode<CharacterShoot>("CharacterShoot");
 		_characterCrossing = GetNode<CharacterCrossing>("CharacterCrossing");
 		_acceleration = MaxSpeed / 0.2f;
+
+		EventHandler.Instance.EmitSignal(nameof(EventHandler.Instance.CharacterDetailsSettingDone));
+		_initialDone = true;
 	}
 
 	public override void _Process(double delta)
 	{
+		if(!_initialDone) return;
 		_Rotate();
 		_Shoot();
 		_Reload();
+		_Skill();
 	}
 
 	public override void _PhysicsProcess(double delta)
 	{
+		if(!_initialDone) return;
 		_Move(delta);
 	}
 
@@ -68,5 +74,11 @@ public partial class CharacterController : CharacterBody2D
 	{
 		if(Input.IsActionJustPressed("reload")) 
 			_characterShoot.ReloadAction();
+	}
+	
+	private void _Skill()
+	{
+		if(Input.IsActionJustPressed("skill-1")) 
+			_characterShoot.SkillAction();
 	}
 }

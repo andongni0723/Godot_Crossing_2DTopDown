@@ -1,12 +1,13 @@
-[gd_scene load_steps=14 format=3 uid="uid://brsjcgbew1al3"]
+[gd_scene load_steps=15 format=3 uid="uid://brsjcgbew1al3"]
 
 [ext_resource type="Script" path="res://Scripts/Character/CharacterShoot.cs" id="1_eyy5u"]
 [ext_resource type="Script" path="res://Scripts/Character/CharacterController.cs" id="1_n7en2"]
-[ext_resource type="Resource" uid="uid://dbkvsso4a2enr" path="res://GameData/Player/BasicCharacter.tres" id="2_2uo3j"]
+[ext_resource type="Resource" uid="uid://dbkvsso4a2enr" path="res://GameDetails/Character/BasicCharacter.tres" id="2_2uo3j"]
 [ext_resource type="PackedScene" uid="uid://bi8we04q2olxq" path="res://GameData/Particle/FireParticle.tscn" id="3_epco8"]
-[ext_resource type="PackedScene" uid="uid://bfu5m4hfq46m4" path="res://GameData/Skill/ExplosiveBullet.tscn" id="3_v6rpx"]
 [ext_resource type="Script" path="res://Scripts/Character/CharacterCrossing.cs" id="4_fkiu2"]
+[ext_resource type="PackedScene" uid="uid://clih3n3okb0e4" path="res://GameData/Projectile/PlayerBullet.tscn" id="4_iw828"]
 [ext_resource type="PackedScene" uid="uid://edqvktuderac" path="res://GameData/Particle/WalkParticle.tscn" id="5_l85mg"]
+[ext_resource type="PackedScene" uid="uid://bfu5m4hfq46m4" path="res://GameData/Skill/ExplosiveBullet.tscn" id="5_mwsf0"]
 [ext_resource type="PackedScene" uid="uid://xksrb2enrai6" path="res://GameData/Particle/BoomParticle.tscn" id="6_8yxkf"]
 [ext_resource type="Texture2D" uid="uid://b750fv0n6fmmj" path="res://Assets/Image/white.png" id="6_hpr4l"]
 [ext_resource type="Texture2D" uid="uid://6rcpaagmx1os" path="res://Assets/Image/triangle.png" id="7_a3tf2"]
@@ -33,13 +34,15 @@ script = ExtResource("1_n7en2")
 CharacterDetails = ExtResource("2_2uo3j")
 MaxSpeed = 350.0
 
-[node name="CharacterShoot" type="Node2D" parent="." node_paths=PackedStringArray("CharacterController", "BulletSpawnPoint", "ReloadTimer")]
+[node name="CharacterShoot" type="Node2D" parent="." node_paths=PackedStringArray("CharacterController", "BulletSpawnPoint", "ReloadTimer", "SkillTimer")]
 script = ExtResource("1_eyy5u")
 CharacterController = NodePath("..")
-Bullet = ExtResource("3_v6rpx")
+Bullet = ExtResource("4_iw828")
+ExplosionBullet = ExtResource("5_mwsf0")
 FireParticle = ExtResource("3_epco8")
 BulletSpawnPoint = NodePath("../Arrow")
 ReloadTimer = NodePath("../Shoot Reload Timer")
+SkillTimer = NodePath("../Skill Timer")
 BulletSpeed = 800.0
 
 [node name="CharacterCrossing" type="Node2D" parent="." node_paths=PackedStringArray("CrossingCooldownTimer")]
@@ -52,6 +55,9 @@ one_shot = true
 
 [node name="Crossing Cooldown Timer" type="Timer" parent="."]
 one_shot = true
+
+[node name="Skill Timer" type="Timer" parent="."]
+wait_time = 3.0
 
 [node name="-----Component" type="Node" parent="."]
 
@@ -81,3 +87,4 @@ position = Vector2(-4.54747e-12, -5.96046e-08)
 shape = SubResource("CircleShape2D_0jyln")
 
 [connection signal="timeout" from="Shoot Reload Timer" to="CharacterShoot" method="_on_shoot_reload_timer_timeout"]
+[connection signal="timeout" from="Skill Timer" to="CharacterShoot" method="_on_shoot_skill_timer_timeout"]

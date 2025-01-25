@@ -3,24 +3,32 @@ using System;
 
 public partial class CharacterShoot : Node2D
 { 
-    //Header component use attribute
-    
     [ExportCategory("Components")]
     [Export] public CharacterController CharacterController;
     [Export] public PackedScene Bullet;
+    [Export] public PackedScene ExplosionBullet;
     [Export] public PackedScene FireParticle;
     [Export] public BulletBar BulletBar;
     [Export] public Node2D BulletSpawnPoint;
     [Export] public Timer ReloadTimer;
+    [Export] public Timer SkillTimer;
     
-    private int currentBullet = 0;
+    private int _currentAmmoCount = 0;
+    private PackedScene _currentBullet;
     
     [ExportCategory("Settings")]
     [Export] public float BulletSpeed = 500;
     
     public override void _Ready()
     {
-        currentBullet = CharacterController.CharacterDetails.ClipBulletSize;
+        EventHandler.Instance.CharacterDetailsSettingDone += _Initial;
+    }
+    
+    private void _Initial()
+    {
+        _currentAmmoCount = CharacterController.CharacterDetails.ClipBulletSize;
+        _currentBullet = Bullet;
+        BulletBar.Initial(0, _currentAmmoCount);
     }
 
     #region Tools
@@ -29,7 +37,7 @@ public partial class CharacterShoot : Node2D
     public void ShootAction()
     {
         // When no bullet and not reloading
-        if (currentBullet <= 0 && ReloadTimer.IsStopped())
+        if (_currentAmmoCount <= 0 && ReloadTimer.IsStopped())
         {
             ReloadAction();
             return;
@@ -50,11 +58,22 @@ public partial class CharacterShoot : Node2D
         ReloadTimer.WaitTime = CharacterController.CharacterDetails.ReloadTime;
         ReloadTimer.Start();
     }
+    
+    public void SkillAction()
+    {
+        SkillTimer.Start();
+        _currentBullet = ExplosionBullet;
+    }
 
     private void _on_shoot_reload_timer_timeout()
     {
-        currentBullet = CharacterController.CharacterDetails.ClipBulletSize;
-        BulletBar.UpdateValue(currentBullet);
+        _currentAmmoCount = CharacterController.CharacterDetails.ClipBulletSize;
+        BulletBar.UpdateValue(_currentAmmoCount);
+    }
+    
+    private void _on_shoot_skill_timer_timeout()
+    {
+        _currentBullet = Bullet;
     }
     
     #endregion
@@ -67,7 +86,7 @@ public partial class CharacterShoot : Node2D
 
     private RigidBody2D _CreateBullet()
     {
-        var newBullet = (RigidBody2D)Bullet.Instantiate();
+        var newBullet = (RigidBody2D)_currentBullet.Instantiate();
         newBullet.GlobalPosition = BulletSpawnPoint.GlobalPosition;
         newBullet.GlobalRotation = BulletSpawnPoint.GlobalRotation + Mathf.Pi;
         newBullet.GetNode<Bullet>(".").Speed = BulletSpeed;
@@ -85,7 +104,7 @@ public partial class CharacterShoot : Node2D
     
     private void _UpdateBulletUI()
     {
-        currentBullet--;
-        BulletBar.UpdateValue(currentBullet);
+        _currentAmmoCount--;
+        BulletBar.UpdateValue(_currentAmmoCount);
     }
 }

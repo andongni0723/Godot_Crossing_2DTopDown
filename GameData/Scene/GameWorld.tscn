@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=3 uid="uid://ch1jqm4rvnnsw"]
+[gd_scene load_steps=38 format=3 uid="uid://ch1jqm4rvnnsw"]
 
 [ext_resource type="Script" path="res://Scripts/Utility/EventHandler.cs" id="1_66w2q"]
 [ext_resource type="Script" path="res://GameData/GameManager.cs" id="1_kqov4"]
@@ -12,7 +12,6 @@
 [ext_resource type="PackedScene" uid="uid://brsjcgbew1al3" path="res://GameData/Player/Player.tscn" id="5_ryv6p"]
 [ext_resource type="AudioStream" uid="uid://ddw5og63q43um" path="res://Assets/Audio/Sound/hit_wall.wav" id="6_cogk4"]
 [ext_resource type="BehaviorTree" uid="uid://dfxefae064lmf" path="res://ai/tasks/enemy_spawn.tres" id="6_yj52x"]
-[ext_resource type="PackedScene" uid="uid://coffghg0m8ru1" path="res://GameData/MissileEnemy.tscn" id="7_4vmon"]
 [ext_resource type="AudioStream" uid="uid://ckopcoi2r8iuv" path="res://Assets/Audio/Sound/hit.wav" id="7_ixu4l"]
 [ext_resource type="FontFile" uid="uid://c5dr6r5wbd4bl" path="res://Font/Px437_IBM_EGA_8x8.ttf" id="7_spwim"]
 [ext_resource type="PackedScene" uid="uid://rdeb7gg1bsbk" path="res://GameData/BasicEnemy.tscn" id="8_joo00"]
@@ -29,9 +28,13 @@
 [ext_resource type="Texture2D" uid="uid://ethcbtnqmn5y" path="res://Assets/Image/out square.png" id="20_snus0"]
 [ext_resource type="Texture2D" uid="uid://b750fv0n6fmmj" path="res://Assets/Image/white.png" id="21_866gf"]
 [ext_resource type="PackedScene" uid="uid://l6317g2qgwpq" path="res://GameData/Player/Shield.tscn" id="28_ys5am"]
-[ext_resource type="PackedScene" uid="uid://dmrs8p6sk5vfi" path="res://GameData/Projectile/EnemyMissileBullet.tscn" id="29_gkxbi"]
 
 [sub_resource type="BlackboardPlan" id="BlackboardPlan_fm1rx"]
+var/isProcess/name = &"isProcess"
+var/isProcess/type = 1
+var/isProcess/value = true
+var/isProcess/hint = 0
+var/isProcess/hint_string = ""
 
 [sub_resource type="Environment" id="Environment_qqc1k"]
 background_mode = 3
@@ -123,7 +126,7 @@ metadata/_edit_lock_ = true
 position = Vector2(-700, -450)
 
 [node name="Spawn Timer" type="Timer" parent="Enemy Spawn Manager"]
-wait_time = 0.1
+wait_time = 0.6
 one_shot = true
 
 [node name="Wave Timer" type="Timer" parent="Enemy Spawn Manager"]
@@ -212,9 +215,6 @@ wallDirection = 3
 [node name="Tower" parent="." instance=ExtResource("10_lvee7")]
 metadata/_edit_lock_ = true
 
-[node name="MisileEnemy" parent="." instance=ExtResource("7_4vmon")]
-position = Vector2(-470, -171)
-
 [node name="CharacterBody2D2" parent="." instance=ExtResource("5_ryv6p")]
 position = Vector2(-132, 141)
 
@@ -291,7 +291,7 @@ theme_override_constants/separation = 174
 modulate = Color(1, 1, 1, 0.266667)
 layout_mode = 2
 
-[node name="Skill Buttons2" parent="World HUD/Control" instance=ExtResource("17_wk0ag")]
+[node name="Skill Buttons4" parent="World HUD/Control" instance=ExtResource("17_wk0ag")]
 modulate = Color(1, 1, 1, 0.266667)
 layout_mode = 2
 
@@ -414,22 +414,4 @@ metadata/_edit_lock_ = true
 [node name="Tower2" parent="." instance=ExtResource("28_ys5am")]
 position = Vector2(184, 152)
 
-[node name="Bullet" parent="." instance=ExtResource("29_gkxbi")]
-visible = false
-position = Vector2(-366, 93)
-
-[node name="Walk Particle" parent="Bullet" index="0"]
-visible = false
-
-[node name="Line2D" parent="Bullet" index="1"]
-visible = false
-
-[node name="Sprite2D" parent="Bullet" index="2"]
-visible = false
-
-[node name="CollisionShape2D" parent="Bullet" index="3"]
-visible = false
-debug_color = Color(0, 0.6, 0.701961, 0)
-
 [editable path="CharacterBody2D2"]
-[editable path="Bullet"]

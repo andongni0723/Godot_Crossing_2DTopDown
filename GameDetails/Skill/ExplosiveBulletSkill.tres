@@ -1,0 +1,15 @@
+[gd_resource type="Resource" load_steps=4 format=3 uid="uid://byxfdjhwnnshg"]
+
+[ext_resource type="PackedScene" uid="uid://bfu5m4hfq46m4" path="res://GameData/Skill/ExplosiveBullet.tscn" id="1_8p0dn"]
+[ext_resource type="Texture2D" uid="uid://bvgfxwy8me1nj" path="res://Assets/Image/CeaselessCycle-light-icon.png" id="2_yn8is"]
+[ext_resource type="Script" path="res://Scripts/Game Resources/SkillDetailsSO.cs" id="3_btj4p"]
+
+[resource]
+script = ExtResource("3_btj4p")
+SkillName = "Explosive Bullet"
+SkillDescription = ""
+SkillIcon = ExtResource("2_yn8is")
+SkillCooldown = 10.0
+SkillDuration = 3.0
+SkillType = 0
+Bullet = ExtResource("1_8p0dn")

@@ -21,7 +21,7 @@ blackboard_plan = SubResource("BlackboardPlan_irvuo")
 custom_name = "Each Spawning"
 
 [sub_resource type="BTDelay" id="BTDelay_urvfk"]
-seconds = 0.3
+seconds = 0.1
 children = [SubResource("BTSubtree_0poi3")]
 
 [sub_resource type="BTProbability" id="BTProbability_47ifb"]
@@ -36,7 +36,7 @@ custom_name = "Wave Spawning"
 children = [SubResource("BTRepeat_fve5j")]
 
 [sub_resource type="BTCooldown" id="BTCooldown_6muga"]
-duration = 0.7
+duration = 0.3
 children = [SubResource("BTSequence_uaeni")]
 
 [sub_resource type="BTSequence" id="BTSequence_px1vb"]
